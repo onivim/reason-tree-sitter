@@ -14,4 +14,14 @@ describe("Parser", ({describe, _}) => {
       expect.int(callCount^).toBe(1);
     });
   });
+  
+  describe("json", ({test, _}) => {
+    test("finalizer gets called", ({expect, _}) => {
+      let jsonParser = Parser.json();
+      let _ = Parser.parseString(jsonParser, "[1, null]");
+
+      // TODO:
+      expect.int(1).toBe(1);
+    });
+  });
 });

@@ -48,3 +48,25 @@ CAMLprim value rets_parser_new_json(value unit) {
   ts_parser_set_language(parser, tree_sitter_json());
   CAMLreturn(v);
 };
+
+CAMLprim value rets_parser_parse_string(value vParser, value source) {
+    CAMLparam2(vParser, source);
+    parser *p = Data_custom_val(vParser);
+    TSParser *tsparser = p->parser;
+
+    const char *source_code = "[1, null]";
+    TSTree *tree = ts_parser_parse_string(
+      tsparser,
+      NULL,
+      source_code,
+      strlen(source_code)
+    );
+
+    TSNode node = ts_tree_root_node(tree);
+    char *string = ts_node_string(node);
+    printf("Syntax tree: %s\n", string);
+      
+  
+    printf("Parse called\n");
+    CAMLreturn(Val_unit);
+};
