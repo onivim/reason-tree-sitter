@@ -1,7 +1,7 @@
 open TestFramework;
 
-describe("Describe", ({test, _}) => {
-  test("test", ({expect}) => {
-    expect.int(0).toBe(0);
-  });
-});
+describe("Describe", ({test, _}) =>
+  test("test", ({expect}) =>
+    expect.int(0).toBe(0)
+  )
+);
