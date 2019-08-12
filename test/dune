@@ -3,5 +3,5 @@
     (public_name treesitter-test)
     (flags (:standard (-w -39)))
     (ocamlopt_flags -linkall -g)
-    (libraries rely.lib libvim)
+    (libraries rely.lib treesitter)
 )

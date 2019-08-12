@@ -2,6 +2,6 @@ open TestFramework;
 
 describe("Describe", ({test, _}) => {
   test("test", ({expect}) => {
-    expect.int(0).toBe(1);
+    expect.int(0).toBe(0);
   });
 });
