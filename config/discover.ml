@@ -19,15 +19,16 @@ let get_os =
         | "Linux" -> Linux
         | _ -> Unknown
 
-let root = Sys.getenv "cur__root"
 let treeSitterIncludePath = Sys.getenv "TREESITTER_INCLUDE_PATH"
 let treeSitterLibPath = Sys.getenv "TREESITTER_LIB_PATH"
-let c_flags = ["-I"; treeSitterIncludePath; "-I"; treeSitterLibPath "proto"]
+let c_flags = ["-I"; treeSitterIncludePath; "-I"; treeSitterLibPath ]
 
-let _ = print_endline (libPath)
+let _ = print_endline (treeSitterIncludePath)
 
 let ccopt s = ["-ccopt"; s]
 let cclib s = ["-cclib"; s]
+
+let libPath = "-L" ^ treeSitterLibPath
 
 let flags = []
         @ ccopt(libPath)

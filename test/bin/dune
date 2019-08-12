@@ -1,0 +1,13 @@
+(executable
+    (name TreeSitterUnitTestRunner)
+    (public_name TreeSitterUnitTestRunner)
+    (package treesitter-test)
+    (flags (:include flags_with_sanitize.sexp))
+    (libraries
+        TreeSitterTest
+            ))
+
+(rule
+    (targets flags_with_sanitize.sexp)
+    (deps (:discover ../../config/discover.exe))
+    (action (run %{discover})))

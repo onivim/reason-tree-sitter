@@ -7,7 +7,7 @@
     "format": "esy dune build @fmt --auto-promote"
   },
   "esy": {
-    "build": ["refmterr dune build -p tree-sitter"],
+    "build": ["refmterr dune build -p treesitter"],
     "buildsInSource": "_build",
     "install": [
         "esy-installer tree-sitter.install"
@@ -26,7 +26,7 @@
     "@esy-ocaml/reason": "3.4.0",
     "refmterr": "*",
     "ocaml": "4.7.1004",
-    "esy-tree-sitter": "1.0.1000"
+    "esy-tree-sitter": "1.2.0"
   },
   "devDependencies": {
     "ocaml": "4.7.1004"
