@@ -28,12 +28,12 @@ void finalize_parser(value v) {
 }
 
 static struct custom_operations parser_custom_ops = {
-  identifier: "parser handling",
-  finalize: finalize_parser,
-  compare: custom_compare_default,
-  hash: custom_hash_default,
-  serialize: custom_serialize_default,
-  deserialize: custom_deserialize_default
+  identifier : "parser handling",
+  finalize : finalize_parser,
+  compare : custom_compare_default,
+  hash : custom_hash_default,
+  serialize : custom_serialize_default,
+  deserialize : custom_deserialize_default
 };
 
 CAMLprim value rets_parser_new_json(value unit) {
@@ -42,31 +42,26 @@ CAMLprim value rets_parser_new_json(value unit) {
   parser parserWrapper;
   TSParser *parser = ts_parser_new();
   parserWrapper.parser = parser;
-  
-  v = caml_alloc_custom (&parser_custom_ops, sizeof(parser), 0, 1);
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser), 0, 1);
   memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser));
   ts_parser_set_language(parser, tree_sitter_json());
   CAMLreturn(v);
 };
 
 CAMLprim value rets_parser_parse_string(value vParser, value source) {
-    CAMLparam2(vParser, source);
-    parser *p = Data_custom_val(vParser);
-    TSParser *tsparser = p->parser;
+  CAMLparam2(vParser, source);
+  parser *p = Data_custom_val(vParser);
+  TSParser *tsparser = p->parser;
 
-    const char *source_code = "[1, null]";
-    TSTree *tree = ts_parser_parse_string(
-      tsparser,
-      NULL,
-      source_code,
-      strlen(source_code)
-    );
+  const char *source_code = "[1, null]";
+  TSTree *tree =
+      ts_parser_parse_string(tsparser, NULL, source_code, strlen(source_code));
 
-    TSNode node = ts_tree_root_node(tree);
-    char *string = ts_node_string(node);
-    printf("Syntax tree: %s\n", string);
-      
-  
-    printf("Parse called\n");
-    CAMLreturn(Val_unit);
+  TSNode node = ts_tree_root_node(tree);
+  char *string = ts_node_string(node);
+  printf("Syntax tree: %s\n", string);
+
+  printf("Parse called\n");
+  CAMLreturn(Val_unit);
 };
