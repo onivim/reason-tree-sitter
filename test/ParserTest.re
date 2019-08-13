@@ -28,10 +28,12 @@ describe("Parser", ({describe, _}) => {
   describe("json", ({test, _}) =>
     test("finalizer gets called", ({expect, _}) => {
       let jsonParser = Parser.json();
-      let _ = Parser.parseString(jsonParser, "[1, \"a\", null]");
+      let tree = Parser.parseString(jsonParser, "[1]");
+      let node = Tree.getRootNode(tree);
+      let ret = Node.toString(node);
+      prerr_endline("RET: " ++ ret);
 
-      // TODO:
-      expect.int(1).toBe(1);
+      expect.string(ret).toEqual("(value (array (number)))");
     })
   );
 });

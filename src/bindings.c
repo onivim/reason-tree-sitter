@@ -9,13 +9,9 @@
 #include <caml/mlvalues.h>
 #include <caml/threads.h>
 
-// Externals
+// External syntaxes
 TSLanguage *tree_sitter_json();
 
-CAMLprim value rets_hello(value unit) {
-  printf("Hello, world!\n");
-  return Val_unit;
-}
 
 typedef struct _parser {
   TSParser *parser;
@@ -55,6 +51,15 @@ static struct custom_operations tree_custom_ops = {
   deserialize : custom_deserialize_default
 };
 
+static struct custom_operations TSNode_custom_ops  = {
+  identifier : "TSNode handling",
+  finalize : custom_finalize_default,
+  compare : custom_compare_default,
+  hash : custom_hash_default,
+  serialize : custom_serialize_default,
+  deserialize : custom_deserialize_default
+};
+
 CAMLprim value rets_parser_new_json(value unit) {
   CAMLparam0();
   CAMLlocal1(v);
@@ -83,11 +88,33 @@ CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
   tree_W treeWrapper;
   treeWrapper.tree = tree;
 
-  TSNode node = ts_tree_root_node(tree);
-  char *string = ts_node_string(node);
-  printf("Syntax tree: %s\n", string);
-
   v = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
   memcpy(Data_custom_val(v), &treeWrapper, sizeof(tree_W));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_tree_root_node(value vTree) {
+  CAMLparam1(vTree);
+  CAMLlocal1(v);
+
+  tree_W *t = Data_custom_val(vTree);
+  TSTree *tree = t->tree;
+
+  TSNode node = ts_tree_root_node(tree);
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);  
+  memcpy(Data_custom_val(v), &node, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_string(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode* node = Data_custom_val(vNode);
+  char *sz = ts_node_string(*node);
+  
+  v = caml_copy_string(sz);
+  free(sz);
+
   CAMLreturn(v);
 };

@@ -5,3 +5,5 @@
  */
 
 type t;
+
+external getRootNode: t => Node.t = "rets_tree_root_node";
