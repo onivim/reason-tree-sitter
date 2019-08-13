@@ -12,7 +12,6 @@
 // External syntaxes
 TSLanguage *tree_sitter_json();
 
-
 typedef struct _parser {
   TSParser *parser;
 } parser_W;
@@ -51,7 +50,7 @@ static struct custom_operations tree_custom_ops = {
   deserialize : custom_deserialize_default
 };
 
-static struct custom_operations TSNode_custom_ops  = {
+static struct custom_operations TSNode_custom_ops = {
   identifier : "TSNode handling",
   finalize : custom_finalize_default,
   compare : custom_compare_default,
@@ -101,7 +100,7 @@ CAMLprim value rets_tree_root_node(value vTree) {
   TSTree *tree = t->tree;
 
   TSNode node = ts_tree_root_node(tree);
-  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);  
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &node, sizeof(TSNode));
   CAMLreturn(v);
 };
@@ -110,11 +109,68 @@ CAMLprim value rets_node_string(value vNode) {
   CAMLparam1(vNode);
   CAMLlocal1(v);
 
-  TSNode* node = Data_custom_val(vNode);
+  TSNode *node = Data_custom_val(vNode);
   char *sz = ts_node_string(*node);
-  
+
   v = caml_copy_string(sz);
   free(sz);
 
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_type(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  const char *sz = ts_node_type(*node);
+
+  v = caml_copy_string(sz);
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_child_count(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t c = ts_node_child_count(*node);
+
+  CAMLreturn(Val_int(c));
+};
+
+CAMLprim value rets_node_child(value vNode, value vX) {
+  CAMLparam2(vNode, vX);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t idx = Int_val(vX);
+
+  TSNode child = ts_node_child(*node, idx);
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &child, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_named_child_count(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t c = ts_node_named_child_count(*node);
+
+  CAMLreturn(Val_int(c));
+};
+
+CAMLprim value rets_node_named_child(value vNode, value vX) {
+  CAMLparam2(vNode, vX);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t idx = Int_val(vX);
+
+  TSNode child = ts_node_named_child(*node, idx);
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &child, sizeof(TSNode));
   CAMLreturn(v);
 };
