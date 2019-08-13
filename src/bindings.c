@@ -58,7 +58,7 @@ static struct custom_operations tree_custom_ops = {
 CAMLprim value rets_parser_new_json(value unit) {
   CAMLparam0();
   CAMLlocal1(v);
-  
+
   parser_W parserWrapper;
   TSParser *parser = ts_parser_new();
   parserWrapper.parser = parser;
@@ -72,7 +72,7 @@ CAMLprim value rets_parser_new_json(value unit) {
 CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
   CAMLparam2(vParser, vSource);
   CAMLlocal1(v);
-  
+
   parser_W *p = Data_custom_val(vParser);
   TSParser *tsparser = p->parser;
 
@@ -82,7 +82,7 @@ CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
 
   tree_W treeWrapper;
   treeWrapper.tree = tree;
-  
+
   TSNode node = ts_tree_root_node(tree);
   char *string = ts_node_string(node);
   printf("Syntax tree: %s\n", string);

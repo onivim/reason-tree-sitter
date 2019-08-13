@@ -1,8 +1,8 @@
 /*
-    Parser.re
+     Parser.re
 
-    Stubs for bindings to the `TSParser` object
-*/
+     Stubs for bindings to the `TSParser` object
+ */
 
 type t;
 
