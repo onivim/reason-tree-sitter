@@ -2,7 +2,7 @@ open TestFramework;
 
 open Treesitter;
 
-describe("Parser", ({describe, _}) =>
+describe("Parser", ({describe, _}) => {
   describe("allocation", ({test, _})
     => {
       test("finalizer gets called for parser", ({expect, _}) => {
@@ -25,11 +25,11 @@ describe("Parser", ({describe, _}) =>
         expect.int(callCount^).toBe(1);
       });
     })
-    /*describe("json", ({test, _}) =>
+    describe("json", ({test, _}) => {
         test("finalizer gets called", ({expect, _}) => {
           let jsonParser = Parser.json();
-          //let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
-          let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
+          let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
+          //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
           let node = Tree.getRootNode(tree);
           let ret = Node.toString(node);
           prerr_endline("RET: " ++ ret);
@@ -47,6 +47,6 @@ describe("Parser", ({describe, _}) =>
           let array1 = Node.getNamedChild(arrayNode, 1);
           expect.string(Node.getType(array0)).toEqual("number");
           expect.string(Node.getType(array1)).toEqual("string");
-        })
-      );*/
-);
+        });
+      });
+});
