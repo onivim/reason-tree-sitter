@@ -73,6 +73,40 @@ CAMLprim value rets_parser_new_json(value unit) {
   CAMLreturn(v);
 };
 
+const char *read(void *payload, uint32_t byte_offset, TSPoint position, uint32_t *bytes_read) {
+  *bytes_read = 0;
+  return NULL;
+}
+
+CAMLprim value rets_parser_parser(value vParser, value vTree, value vRead) {
+  CAMLparam3(vParser, vTree, vRead);
+  CAMLlocal1(ret);
+  
+  parser_W *p = Data_custom_val(vParser);
+  TSParser *tsparser = p->parser;
+
+  TSTree *oldTree = NULL;
+  // Some(tree)
+  if (Is_block(vTree)) {
+    tree_W *t  = Data_custom_val(Field(vTree, 0));
+    oldTree = t->tree;
+  }
+
+  TSInput input;
+  input.payload = (void *)vRead;
+  input.read = &read;
+  input.encoding = TSInputEncodingUTF8;
+
+  TSTree *tree = ts_parser_parse(tsparser, oldTree, input);
+
+  tree_W treeWrapper;
+  treeWrapper.tree = tree;
+  ret = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
+  memcpy(Data_custom_val(ret), &treeWrapper, sizeof(tree_W));
+  
+  CAMLreturn(ret);
+};
+
 CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
   CAMLparam2(vParser, vSource);
   CAMLlocal1(v);
@@ -86,9 +120,9 @@ CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
 
   tree_W treeWrapper;
   treeWrapper.tree = tree;
-
   v = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
   memcpy(Data_custom_val(v), &treeWrapper, sizeof(tree_W));
+  
   CAMLreturn(v);
 };
 
