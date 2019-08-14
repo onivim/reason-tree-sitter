@@ -25,7 +25,7 @@ describe("Parser", ({describe, _}) => {
     });
   });
 
-  describe("json", ({test, _}) =>
+  /*describe("json", ({test, _}) =>
     test("finalizer gets called", ({expect, _}) => {
       let jsonParser = Parser.json();
       //let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
@@ -48,5 +48,5 @@ describe("Parser", ({describe, _}) => {
       expect.string(Node.getType(array0)).toEqual("number");
       expect.string(Node.getType(array1)).toEqual("string");
     })
-  );
+  );*/
 });

@@ -78,7 +78,7 @@ const char *read(void *payload, uint32_t byte_offset, TSPoint position, uint32_t
   return NULL;
 }
 
-CAMLprim value rets_parser_parser(value vParser, value vTree, value vRead) {
+CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
   CAMLparam3(vParser, vTree, vRead);
   CAMLlocal1(ret);
   
