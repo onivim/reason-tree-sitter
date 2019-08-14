@@ -19,7 +19,7 @@
     "@opam/merlin-extend": "0.3",
     "@opam/ocaml-migrate-parsetree": "1.3.1",
     "@opam/biniou": "1.2.0",
-    "@opam/easy-format": "1.3.1"
+    "@opam/easy-format": "1.3.1",
     "esy-tree-sitter": "github:onivim/esy-tree-sitter#3ef96ba2"
   },
   "dependencies": {
