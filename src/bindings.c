@@ -73,25 +73,26 @@ CAMLprim value rets_parser_new_json(value unit) {
   CAMLreturn(v);
 };
 
+
 const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
                  uint32_t *bytes_read) {
-  
-  // printf("[READ] byte_offset: %d line: %d col: %d\n", byte_offset, position.row, position.column);
-  
-  value readFn = (value)payload;
+  //printf("[READ] byte_offset: %d line: %d col: %d\n", byte_offset, position.row, position.column);
+
+  //printf("call test call...\n");
+  value *closure = caml_named_value("rets__parse_read");
+  value result = caml_callback3(*closure, Val_int(byte_offset), Val_int(position.row), Val_int(position.column));
 
   char *ret = NULL;
   *bytes_read = 0;
+  if (Is_block(result)) {
+    value strVal = Field(result, 0);
 
-  value str = caml_callback3(readFn, Val_int(byte_offset), Val_int(position.row), Val_int(position.column));
-
-  if (Is_block(str)) {
-    value strVal = String_val(Field(str, 0));
-
-    *bytes_read = strlen(strVal);
-    ret = strVal;
+    char *str = String_val(strVal);
+    *bytes_read = strlen(str);
+    ret = str;
   }
-
+  //printf("test call DONE\n");
+  
   return ret;
 }
 
@@ -101,7 +102,7 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
 
   parser_W *p = Data_custom_val(vParser);
   TSParser *tsparser = p->parser;
-
+  
   TSTree *oldTree = NULL;
   // Some(tree)
   if (Is_block(vTree)) {
@@ -120,7 +121,7 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
   treeWrapper.tree = tree;
   ret = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
   memcpy(Data_custom_val(ret), &treeWrapper, sizeof(tree_W));
-
+  
   CAMLreturn(ret);
 };
 

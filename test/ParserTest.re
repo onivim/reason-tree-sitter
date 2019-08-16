@@ -53,7 +53,7 @@ describe("Parser", ({describe, _}) => {
   describe("parseArray", ({test, _}) => {
     test("parses a single line array", ({expect, _}) => {
       let jsonParser = Parser.json();
-      let tree = Parser.parseArray(jsonParser, None, [|"[1, \"2\"]"|]);
+      let (tree, _) = Parser.parseArray(jsonParser, None, [|"[1, \"2\"]"|]);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
@@ -72,7 +72,7 @@ describe("Parser", ({describe, _}) => {
       |];
 
       let jsonParser = Parser.json();
-      let tree = Parser.parseArray(jsonParser, None, multiLineArray);
+      let (tree, _) = Parser.parseArray(jsonParser, None, multiLineArray);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
