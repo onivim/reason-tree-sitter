@@ -50,4 +50,35 @@ describe("Parser", ({describe, _}) => {
       expect.string(Node.getType(array1)).toEqual("string");
     })
   );
+  describe("parseArray", ({test, _}) => {
+    test("parses a single line array", ({expect, _}) => {
+      let jsonParser = Parser.json();
+      let tree = Parser.parseArray(jsonParser, None, [|"[1, \"2\"]"|]);
+      let node = Tree.getRootNode(tree);
+      let ret = Node.toString(node);
+      prerr_endline("RET: " ++ ret);
+      expect.string(ret).toEqual(
+        "(value (array (number) (string (string_content))))",
+      );
+    });
+    test("parses a multi-line array", ({expect, _}) => {
+
+      let multiLineArray = [|
+      "[",
+      "1,",
+      "\"2\"",
+      "]",
+      "", 
+      |];
+
+      let jsonParser = Parser.json();
+      let tree = Parser.parseArray(jsonParser, None, multiLineArray);
+      let node = Tree.getRootNode(tree);
+      let ret = Node.toString(node);
+      prerr_endline("RET: " ++ ret);
+      expect.string(ret).toEqual(
+        "(value (array (number) (string (string_content))))",
+      );
+    });
+  });
 });

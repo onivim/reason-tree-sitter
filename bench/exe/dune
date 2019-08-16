@@ -1,0 +1,7 @@
+(executable
+    (name TreeSitterBench)
+    (public_name TreeSitterBench)
+    (modules TreeSitterBench)
+    (libraries treesitter-bench.lib)
+    (package treesitter-bench)
+)

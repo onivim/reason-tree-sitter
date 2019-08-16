@@ -1,0 +1,11 @@
+(library
+    (name TreeSitterBenchLib)
+    (public_name treesitter-bench.lib)
+    (ocamlopt_flags -linkall)
+    (libraries treesitter reperf.lib)
+)
+
+(install
+    (section bin)
+    (package treesitter-bench)
+    (files canada.json))

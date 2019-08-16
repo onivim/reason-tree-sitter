@@ -1,0 +1,16 @@
+{
+  "source": "./package.json",
+  "scripts": {
+    "run": "esy '@bench' x TreeSitterBench"
+  },
+  "override": {
+      "build": ["dune build --root . -j4"],
+      "dependencies": {
+        "reperf": "^1.3.0"
+      },
+      "install": [
+          "esy-installer treesitter.install",
+          "esy-installer treesitter-bench.install"
+      ]
+  }
+}

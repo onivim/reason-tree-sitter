@@ -73,10 +73,26 @@ CAMLprim value rets_parser_new_json(value unit) {
   CAMLreturn(v);
 };
 
-const char *read(void *payload, uint32_t byte_offset, TSPoint position,
+const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
                  uint32_t *bytes_read) {
+  
+  // printf("[READ] byte_offset: %d line: %d col: %d\n", byte_offset, position.row, position.column);
+  
+  value readFn = (value)payload;
+
+  char *ret = NULL;
   *bytes_read = 0;
-  return NULL;
+
+  value str = caml_callback3(readFn, Val_int(byte_offset), Val_int(position.row), Val_int(position.column));
+
+  if (Is_block(str)) {
+    value strVal = String_val(Field(str, 0));
+
+    *bytes_read = strlen(strVal);
+    ret = strVal;
+  }
+
+  return ret;
 }
 
 CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
@@ -95,7 +111,7 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
 
   TSInput input;
   input.payload = (void *)vRead;
-  input.read = &read;
+  input.read = &rets_read;
   input.encoding = TSInputEncodingUTF8;
 
   TSTree *tree = ts_parser_parse(tsparser, oldTree, input);

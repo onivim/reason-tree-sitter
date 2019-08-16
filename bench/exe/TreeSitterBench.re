@@ -1,0 +1,1 @@
+TreeSitterBenchLib.BenchFramework.cli();
