@@ -17,8 +17,6 @@ type readFunction = (int, int, int) => option(string);
 external _parse: (t, option(Tree.t), readFunction) => Tree.t =
   "rets_parser_parse";
 
-type incrementalArray = (Tree.t, array(int));
-
 let _parse_read_fn: ref(readFunction) = ref((_, _, _) => None);
 
 let _parse_read = (byteOffset: int, line: int, col: int) => {
