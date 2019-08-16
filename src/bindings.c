@@ -73,11 +73,12 @@ CAMLprim value rets_parser_new_json(value unit) {
   CAMLreturn(v);
 };
 
-
 const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
-                 uint32_t *bytes_read) {
+                      uint32_t *bytes_read) {
   value *closure = caml_named_value("rets__parse_read");
-  value result = caml_callback3(*closure, Val_int(byte_offset), Val_int(position.row), Val_int(position.column));
+  value result =
+      caml_callback3(*closure, Val_int(byte_offset), Val_int(position.row),
+                     Val_int(position.column));
 
   char *ret = NULL;
   *bytes_read = 0;
@@ -88,7 +89,7 @@ const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
     *bytes_read = strlen(str);
     ret = str;
   }
-  
+
   return ret;
 }
 
@@ -98,7 +99,7 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
 
   parser_W *p = Data_custom_val(vParser);
   TSParser *tsparser = p->parser;
-  
+
   TSTree *oldTree = NULL;
   // Some(tree)
   if (Is_block(vTree)) {
@@ -117,7 +118,7 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
   treeWrapper.tree = tree;
   ret = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
   memcpy(Data_custom_val(ret), &treeWrapper, sizeof(tree_W));
-  
+
   CAMLreturn(ret);
 };
 
@@ -153,19 +154,15 @@ CAMLprim value rets_tree_root_node(value vTree) {
   CAMLreturn(v);
 };
 
-CAMLprim value rets_tree_edit_native(
-  value vTree, 
-  value vStartByte, 
-  value vOldEndByte,
-  value vNewEndByte,
-  value vStartLine,
-  value vOldEndLine,
-  value vNewEndLine) {
+CAMLprim value rets_tree_edit_native(value vTree, value vStartByte,
+                                     value vOldEndByte, value vNewEndByte,
+                                     value vStartLine, value vOldEndLine,
+                                     value vNewEndLine) {
   CAMLparam5(vTree, vStartByte, vOldEndByte, vNewEndByte, vStartLine);
   CAMLxparam2(vOldEndLine, vNewEndLine);
 
   CAMLlocal1(v);
-  
+
   tree_W *t = Data_custom_val(vTree);
   TSTree *tree = t->tree;
 
@@ -182,7 +179,7 @@ CAMLprim value rets_tree_edit_native(
   edit.new_end_point.column = 0;
 
   TSTree *ret = ts_tree_copy(tree);
-  
+
   ts_tree_edit(ret, &edit);
   tree_W treeWrapper;
   treeWrapper.tree = ret;
@@ -192,9 +189,9 @@ CAMLprim value rets_tree_edit_native(
   CAMLreturn(v);
 };
 
-
 CAMLprim value rets_tree_edit_bytecode(value *argv, int argn) {
-  return rets_tree_edit_native(argv[0], argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+  return rets_tree_edit_native(argv[0], argv[1], argv[2], argv[3], argv[4],
+                               argv[5], argv[6]);
 }
 
 CAMLprim value rets_node_string(value vNode) {
