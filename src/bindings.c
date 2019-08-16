@@ -157,6 +157,43 @@ CAMLprim value rets_tree_root_node(value vTree) {
   CAMLreturn(v);
 };
 
+CAMLprim value rets_tree_edit_native(
+  value vTree, 
+  value vStartByte, 
+  value vOldEndByte,
+  value vNewEndByte,
+  value vStartLine,
+  value vOldEndLine,
+  value vNewEndLine) {
+  CAMLparam5(vTree, vStartByte, vOldEndByte, vNewEndByte, vStartLine);
+  CAMLxparam2(vOldEndLine, vNewEndLine);
+  
+  printf("rets_tree_edit");
+  tree_W *t = Data_custom_val(vTree);
+  TSTree *tree = t->tree;
+
+  TSInputEdit edit;
+  edit.start_byte = Long_val(vStartByte);
+  edit.old_end_byte = Long_val(vOldEndByte);
+  edit.new_end_byte = Long_val(vNewEndByte);
+
+  edit.start_point.row = Long_val(vStartLine);
+  edit.start_point.column = 0;
+  edit.old_end_point.row = Long_val(vOldEndLine);
+  edit.old_end_point.column = 0;
+  edit.new_end_point.row = Long_val(vNewEndLine);
+  edit.new_end_point.column = 0;
+
+  ts_tree_edit(tree, &edit);
+
+  CAMLreturn(vTree);
+  };
+
+
+CAMLprim value rets_tree_edit_bytecode(value *argv, int argn) {
+  return rets_tree_edit_native(argv[0], argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+}
+
 CAMLprim value rets_node_string(value vNode) {
   CAMLparam1(vNode);
   CAMLlocal1(v);
