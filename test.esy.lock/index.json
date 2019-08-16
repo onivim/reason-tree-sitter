@@ -1,7 +1,26 @@
 {
-  "checksum": "50e0f8669f0575a8dc10a31d2defa5d3",
+  "checksum": "471391fdb2f179052cf9b8c544c537ca",
   "root": "reason-tree-sitter@link-dev:./package.json",
   "node": {
+    "reperf@1.4.0@d41d8cd9": {
+      "id": "reperf@1.4.0@d41d8cd9",
+      "name": "reperf",
+      "version": "1.4.0",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://registry.npmjs.org/reperf/-/reperf-1.4.0.tgz#sha1:a1b6125e1cb7d61654c435b013114991b974dcde"
+        ]
+      },
+      "overrides": [],
+      "dependencies": [
+        "refmterr@3.2.2@d41d8cd9", "ocaml@4.7.1004@d41d8cd9",
+        "@reason-native/pastel@0.1.0@d41d8cd9",
+        "@opam/printbox@opam:0.2@9f070302", "@opam/dune@opam:1.7.0@2dd70b87",
+        "@esy-ocaml/reason@3.4.0@d41d8cd9"
+      ],
+      "devDependencies": []
+    },
     "refmterr@3.2.2@d41d8cd9": {
       "id": "refmterr@3.2.2@d41d8cd9",
       "name": "refmterr",
@@ -14,7 +33,7 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.7.1004@d41d8cd9", "@reason-native/pastel@0.2.1@d41d8cd9",
+        "ocaml@4.7.1004@d41d8cd9", "@reason-native/pastel@0.1.0@d41d8cd9",
         "@reason-native/console@0.1.0@d41d8cd9",
         "@opam/re@opam:1.9.0@fc2ceb05", "@opam/dune@opam:1.7.0@2dd70b87",
         "@opam/atdgen@opam:2.0.0@5d912e07",
@@ -33,8 +52,8 @@
       },
       "overrides": [ "test.json" ],
       "dependencies": [
-        "refmterr@3.2.2@d41d8cd9", "ocaml@4.7.1004@d41d8cd9",
-        "esy-tree-sitter@1.3.0@d41d8cd9",
+        "reperf@1.4.0@d41d8cd9", "refmterr@3.2.2@d41d8cd9",
+        "ocaml@4.7.1004@d41d8cd9", "esy-tree-sitter@1.3.0@d41d8cd9",
         "@reason-native/rely@2.2.0@d41d8cd9",
         "@opam/odoc@opam:1.4.1@becd49d1", "@opam/dune@opam:1.7.0@2dd70b87",
         "@esy-ocaml/reason@3.4.0@d41d8cd9"
@@ -82,21 +101,21 @@
       "overrides": [],
       "dependencies": [
         "refmterr@3.2.2@d41d8cd9", "ocaml@4.7.1004@d41d8cd9",
-        "@reason-native/pastel@0.2.1@d41d8cd9",
+        "@reason-native/pastel@0.1.0@d41d8cd9",
         "@reason-native/file-context-printer@0.0.3@d41d8cd9",
         "@opam/re@opam:1.9.0@fc2ceb05", "@opam/junit@opam:2.0.1@8972ddca",
         "@opam/dune@opam:1.7.0@2dd70b87", "@esy-ocaml/reason@3.4.0@d41d8cd9"
       ],
       "devDependencies": []
     },
-    "@reason-native/pastel@0.2.1@d41d8cd9": {
-      "id": "@reason-native/pastel@0.2.1@d41d8cd9",
+    "@reason-native/pastel@0.1.0@d41d8cd9": {
+      "id": "@reason-native/pastel@0.1.0@d41d8cd9",
       "name": "@reason-native/pastel",
-      "version": "0.2.1",
+      "version": "0.1.0",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://registry.npmjs.org/@reason-native/pastel/-/pastel-0.2.1.tgz#sha1:c790b51e963ac94a0de141be0a8e4d077905978b"
+          "archive:https://registry.npmjs.org/@reason-native/pastel/-/pastel-0.1.0.tgz#sha1:2b262a654b8d807215df74768e628e9b05b3f5e3"
         ]
       },
       "overrides": [],
@@ -118,7 +137,7 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.7.1004@d41d8cd9", "@reason-native/pastel@0.2.1@d41d8cd9",
+        "ocaml@4.7.1004@d41d8cd9", "@reason-native/pastel@0.1.0@d41d8cd9",
         "@opam/re@opam:1.9.0@fc2ceb05", "@opam/dune@opam:1.7.0@2dd70b87",
         "@esy-ocaml/reason@3.4.0@d41d8cd9"
       ],
@@ -371,6 +390,34 @@
       ],
       "devDependencies": [
         "ocaml@4.7.1004@d41d8cd9", "@opam/result@opam:1.4@6fb665c3"
+      ]
+    },
+    "@opam/printbox@opam:0.2@9f070302": {
+      "id": "@opam/printbox@opam:0.2@9f070302",
+      "name": "@opam/printbox",
+      "version": "opam:0.2",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://opam.ocaml.org/cache/md5/d8/d84584a8ebdf3faa7b04704f0f75813c#md5:d84584a8ebdf3faa7b04704f0f75813c",
+          "archive:https://github.com/c-cube/printbox/archive/0.2.tar.gz#md5:d84584a8ebdf3faa7b04704f0f75813c"
+        ],
+        "opam": {
+          "name": "printbox",
+          "version": "0.2",
+          "path": "test.esy.lock/opam/printbox.0.2"
+        }
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.7.1004@d41d8cd9", "@opam/tyxml@opam:4.3.0@9dca4c30",
+        "@opam/dune@opam:1.7.0@2dd70b87",
+        "@opam/base-bytes@opam:base@19d0c2ff",
+        "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "ocaml@4.7.1004@d41d8cd9", "@opam/dune@opam:1.7.0@2dd70b87",
+        "@opam/base-bytes@opam:base@19d0c2ff"
       ]
     },
     "@opam/ppx_derivers@opam:1.2.1@aee9c3db": {
