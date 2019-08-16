@@ -76,9 +76,6 @@ CAMLprim value rets_parser_new_json(value unit) {
 
 const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
                  uint32_t *bytes_read) {
-  //printf("[READ] byte_offset: %d line: %d col: %d\n", byte_offset, position.row, position.column);
-
-  //printf("call test call...\n");
   value *closure = caml_named_value("rets__parse_read");
   value result = caml_callback3(*closure, Val_int(byte_offset), Val_int(position.row), Val_int(position.column));
 
@@ -91,7 +88,6 @@ const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
     *bytes_read = strlen(str);
     ret = str;
   }
-  //printf("test call DONE\n");
   
   return ret;
 }
@@ -167,8 +163,9 @@ CAMLprim value rets_tree_edit_native(
   value vNewEndLine) {
   CAMLparam5(vTree, vStartByte, vOldEndByte, vNewEndByte, vStartLine);
   CAMLxparam2(vOldEndLine, vNewEndLine);
+
+  CAMLlocal1(v);
   
-  printf("rets_tree_edit");
   tree_W *t = Data_custom_val(vTree);
   TSTree *tree = t->tree;
 
@@ -184,10 +181,16 @@ CAMLprim value rets_tree_edit_native(
   edit.new_end_point.row = Long_val(vNewEndLine);
   edit.new_end_point.column = 0;
 
-  ts_tree_edit(tree, &edit);
+  TSTree *ret = ts_tree_copy(tree);
+  
+  ts_tree_edit(ret, &edit);
+  tree_W treeWrapper;
+  treeWrapper.tree = ret;
+  v = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
+  memcpy(Data_custom_val(v), &treeWrapper, sizeof(tree_W));
 
-  CAMLreturn(vTree);
-  };
+  CAMLreturn(v);
+};
 
 
 CAMLprim value rets_tree_edit_bytecode(value *argv, int argn) {
