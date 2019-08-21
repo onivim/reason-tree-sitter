@@ -7,8 +7,8 @@
 type t;
 
 type point = {
-    row: int,
-    column: int,
+  row: int,
+  column: int,
 };
 
 external toString: t => string = "rets_node_string";
@@ -23,7 +23,8 @@ external getNamedChild: (t, int) => t = "rets_node_named_child";
 external getNextSibling: t => int = "rets_node_next_sibling";
 external getPrevSibling: t => int = "rets_node_prev_sibling";
 
-external getDescendantForPointRange: (t, int, int, int, int) = "rets_node_descendant_for_point_range";
+external getDescendantForPointRange: (t, int, int, int, int) =
+  "rets_node_descendant_for_point_range";
 
 external getStartByte: t => int = "rets_node_start_byte";
 external getEndByte: t => int = "rets_node_end_byte";
