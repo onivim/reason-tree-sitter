@@ -8,8 +8,7 @@ describe("Node", ({describe, _}) => {
     ArrayParser.parse(jsonParser, None, [|"[1,", "\"2\"", "]"|]);
   let simpleNode = Tree.getRootNode(tree);
 
-  //let (tree, _) = ArrayParser.parse(jsonParser, None, [| "[,]" |]);
-  let (tree, _) = ArrayParser.parse(jsonParser, None, [|"[1, 2]"|]);
+  let (tree, _) = ArrayParser.parse(jsonParser, None, [|"[,]"|]);
   let errorNode = Tree.getRootNode(tree);
   // "(value (array (number) (string (string_content))))",
 
