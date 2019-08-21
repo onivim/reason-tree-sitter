@@ -4,42 +4,104 @@
      Stubs for bindings to the `TSTree` object
  */
 
-type t;
+open NativeTypes;
+
+type t = (Tree.t, node);
 
 type point = {
   row: int,
   column: int,
 };
 
-external toString: t => string = "rets_node_string";
+let getTree = (v: t) => {
+  let (_, tree) = v;
+  tree;
+};
 
-external getChildCount: t => int = "rets_node_child_count";
-external getChild: (t, int) => t = "rets_node_child";
-external getParent: t => t = "rets_node_parent";
+external _toString: node => string = "rets_node_string";
 
-external getNamedChildCount: t => int = "rets_node_named_child_count";
-external getNamedChild: (t, int) => t = "rets_node_named_child";
+external _getChildCount: node => int = "rets_node_child_count";
+external _getChild: (node, int) => node = "rets_node_child";
+external _getParent: node => node = "rets_node_parent";
 
-external getNextSibling: t => int = "rets_node_next_sibling";
-external getPrevSibling: t => int = "rets_node_prev_sibling";
+external _getNamedChildCount: node => int = "rets_node_named_child_count";
+external _getNamedChild: (node, int) => node = "rets_node_named_child";
 
-external getDescendantForPointRange: (t, int, int, int, int) => t =
+external _getNextSibling: node => int = "rets_node_next_sibling";
+external _getPrevSibling: node => int = "rets_node_prev_sibling";
+
+external _getDescendantForPointRange: (node, int, int, int, int) => node =
   "rets_node_descendant_for_point_range";
 
-external getStartByte: t => int = "rets_node_start_byte";
-external getEndByte: t => int = "rets_node_end_byte";
+external _getStartByte: node => int = "rets_node_start_byte";
+external _getEndByte: node => int = "rets_node_end_byte";
 
-external getStartPoint: t => point = "rets_node_start_point";
-external getEndPoint: t => point = "rets_node_end_point";
+external _getStartPoint: node => point = "rets_node_start_point";
+external _getEndPoint: node => point = "rets_node_end_point";
 
-external hasChanges: t => bool = "rets_node_has_changes";
-external hasError: t => bool = "rets_node_has_error";
+external _hasChanges: node => bool = "rets_node_has_changes";
+external _hasError: node => bool = "rets_node_has_error";
 
-external isMissing: t => bool = "rets_node_is_missing";
-external isNull: t => bool = "rets_node_is_null";
-external isNamed: t => bool = "rets_node_is_named";
-external isError: t => bool = "rets_node_is_error";
-external isExtra: t => bool = "rets_node_is_extra";
+external _isMissing: node => bool = "rets_node_is_missing";
+external _isNull: node => bool = "rets_node_is_null";
+external _isNamed: node => bool = "rets_node_is_named";
+external _isError: node => bool = "rets_node_is_error";
+external _isExtra: node => bool = "rets_node_is_extra";
 
-external getSymbol: t => int = "rets_node_symbol";
-external getType: t => string = "rets_node_type";
+external _getSymbol: node => int = "rets_node_symbol";
+external _getType: node => string = "rets_node_type";
+
+let wrap0 = (f, v) => {
+  let (_, node) = v; 
+  f(node);
+}
+
+let toString: t => string = wrap0(_toString);
+let getChildCount: t => int = wrap0(_getChildCount);
+
+
+let getChild = (v: t, idx) => {
+  let (tree, node) = v;
+  (tree, _getChild(node, idx));
+};
+
+let getNamedChildCount: t => int = wrap0(_getNamedChildCount);
+
+let getNamedChild = (v: t, idx) => {
+  let (tree, node) = v;
+  (tree, _getNamedChild(node, idx));
+};
+
+let getNextSibling = (v) => {
+  let (tree, node) = v;
+  (tree, _getNextSibling(node));
+};
+
+let getPrevSibling = (v) => {
+  let (tree, node) = v;
+  (tree, _getPrevSibling(node));
+};
+
+let getDescendantForPointRange = (v: t, r0, c0, r1, c1) => {
+  let (tree, node) = v;
+  (tree, _getDescendantForPointRange(node, r0, c0, r1, c1));
+};
+
+let getStartByte: t => int = wrap0(_getStartByte);
+
+let getEndByte: t => int = wrap0(_getEndByte);
+
+let getStartPoint: t => point = wrap0(_getStartPoint);
+let getEndPoint: t => point = wrap0(_getEndPoint);
+
+let hasChanges: t => bool  = wrap0(_hasChanges);
+let hasError: t => bool   = wrap0(_hasError);
+
+let isMissing: t => bool = wrap0(_isMissing);
+let isNull: t => bool = wrap0(_isNull);
+let isNamed: t => bool = wrap0(_isNamed);
+let isError: t => bool = wrap0(_isError);
+let isExtra: t => bool = wrap0(_isExtra);
+
+let getSymbol: t => int = wrap0(_getSymbol);
+let getType: t => string = wrap0(_getType);
