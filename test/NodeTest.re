@@ -20,10 +20,10 @@ describe("Node", ({describe, _}) => {
       let startPoint = Node.getStartPoint(line2Node);
       let endPoint = Node.getEndPoint(line2Node);
 
-      expect.int(startPoint.row).toBe(1);
+      expect.int(startPoint.line).toBe(1);
       expect.int(startPoint.column).toBe(0);
 
-      expect.int(endPoint.row).toBe(1);
+      expect.int(endPoint.line).toBe(1);
       expect.int(endPoint.column).toBe(3);
 
       prerr_endline("RET: " ++ ret);
@@ -34,10 +34,10 @@ describe("Node", ({describe, _}) => {
         let startPoint = Node.getStartPoint(simpleNode);
         let endPoint = Node.getEndPoint(simpleNode);
 
-        expect.int(startPoint.row).toBe(0);
+        expect.int(startPoint.line).toBe(0);
         expect.int(startPoint.column).toBe(0);
 
-        expect.int(endPoint.row).toBe(3);
+        expect.int(endPoint.line).toBe(3);
         expect.int(endPoint.column).toBe(0);
       })
     );

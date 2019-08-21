@@ -4,14 +4,10 @@
      Stubs for bindings to the `TSTree` object
  */
 
+open Types;
 open NativeTypes;
 
 type t = (Tree.t, node);
-
-type point = {
-  row: int,
-  column: int,
-};
 
 let getTree = (v: t) => {
   let (_, tree) = v;
@@ -36,8 +32,8 @@ external _getDescendantForPointRange: (node, int, int, int, int) => node =
 external _getStartByte: node => int = "rets_node_start_byte";
 external _getEndByte: node => int = "rets_node_end_byte";
 
-external _getStartPoint: node => point = "rets_node_start_point";
-external _getEndPoint: node => point = "rets_node_end_point";
+external _getStartPoint: node => Position.t = "rets_node_start_point";
+external _getEndPoint: node => Position.t = "rets_node_end_point";
 
 external _hasChanges: node => bool = "rets_node_has_changes";
 external _hasError: node => bool = "rets_node_has_error";
@@ -90,8 +86,8 @@ let getStartByte: t => int = wrap0(_getStartByte);
 
 let getEndByte: t => int = wrap0(_getEndByte);
 
-let getStartPoint: t => point = wrap0(_getStartPoint);
-let getEndPoint: t => point = wrap0(_getEndPoint);
+let getStartPoint: t => Position.t = wrap0(_getStartPoint);
+let getEndPoint: t => Position.t = wrap0(_getEndPoint);
 
 let hasChanges: t => bool = wrap0(_hasChanges);
 let hasError: t => bool = wrap0(_hasError);
@@ -104,3 +100,25 @@ let isExtra: t => bool = wrap0(_isExtra);
 
 let getSymbol: t => int = wrap0(_getSymbol);
 let getType: t => string = wrap0(_getType);
+
+let getChildren = (node: t) => {
+  let i = ref(0);
+  let count = getChildCount(node);
+
+  let children = ref([]);
+
+  while (i^ < count) {
+    let child = getChild(node, i^);
+    children := [child, ...children^];
+    incr(i);
+  };
+
+  List.rev(children^);
+};
+
+let getRange = (node: t) => {
+  let startPosition = getStartPoint(node);
+  let endPosition = getEndPoint(node);
+
+  Range.create(~startPosition, ~endPosition, ());
+};

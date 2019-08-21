@@ -13,4 +13,12 @@ steps:
   - script: esy @test install
     displayName: 'test: esy install'
   - script: esy @test run
-    displayName: 'test: esy run'
+    displayName: 'test: esy run - iteration 1'
+  - script: esy @test run
+    displayName: 'test: esy run - iteration 2'
+  - script: esy @test run
+    displayName: 'test: esy run - iteration 3'
+  - script: esy @test run
+    displayName: 'test: esy run - iteration 4'
+  - script: esy @test run
+    displayName: 'test: esy run - iteration 5'
