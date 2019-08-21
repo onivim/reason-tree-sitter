@@ -23,7 +23,7 @@ external getNamedChild: (t, int) => t = "rets_node_named_child";
 external getNextSibling: t => int = "rets_node_next_sibling";
 external getPrevSibling: t => int = "rets_node_prev_sibling";
 
-external getDescendantForPointRange: (t, int, int, int, int) =
+external getDescendantForPointRange: (t, int, int, int, int) => t =
   "rets_node_descendant_for_point_range";
 
 external getStartByte: t => int = "rets_node_start_byte";
@@ -38,6 +38,7 @@ external hasError: t => bool = "rets_node_has_error";
 external isMissing: t => bool = "rets_node_is_missing";
 external isNull: t => bool = "rets_node_is_null";
 external isNamed: t => bool = "rets_node_is_named";
+external isError: t => bool = "rets_node_is_error";
 external isExtra: t => bool = "rets_node_is_extra";
 
 external getSymbol: t => int = "rets_node_symbol";
