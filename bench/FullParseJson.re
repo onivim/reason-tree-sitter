@@ -4,8 +4,11 @@ open BenchFramework;
 Printexc.record_backtrace(true);
 
 let jsonParser = Parser.json();
+let cParser = Parser.c();
 
 let simpleJson = "[1, \"2\", { \"test\": [1] }]";
+
+let simpleC = "int main() { return 1; }";
 
 let parse = (v: string, ()) => {
   let _ = Parser.parseString(jsonParser, v);
@@ -29,6 +32,14 @@ bench(
 );
 
 bench(
+  ~name="parseString: Small C",
+  ~options,
+  ~setup,
+  ~f=parse(simpleC),
+  (),
+);
+
+bench(
   ~name="parseString: Large JSON (canada.json)",
   ~options,
   ~setup,
@@ -37,9 +48,25 @@ bench(
 );
 
 bench(
+  ~name="parseString: Large C (sqlite3.c)",
+  ~options,
+  ~setup,
+  ~f=parse(TestData.largeCString),
+  (),
+);
+
+bench(
   ~name="parseArray: Large JSON (canada.json)",
   ~options,
   ~setup,
   ~f=parseArray(TestData.largeJsonArray),
+  (),
+);
+
+bench(
+  ~name="parseArray: Large C (sqlite3.c)",
+  ~options,
+  ~setup,
+  ~f=parseArray(TestData.largeCArray),
   (),
 );

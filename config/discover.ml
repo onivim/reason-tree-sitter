@@ -24,6 +24,7 @@ let treeSitterLibPath = Sys.getenv "TREESITTER_LIB_PATH"
 let c_flags = ["-I"; treeSitterIncludePath; "-I"; treeSitterLibPath ]
 
 let _ = print_endline (treeSitterIncludePath)
+let _ = print_endline (treeSitterLibPath)
 
 let ccopt s = ["-ccopt"; s]
 let cclib s = ["-cclib"; s]

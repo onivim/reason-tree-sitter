@@ -27,7 +27,7 @@ let setup = () => ();
 let options = Reperf.Options.create(~iterations=10, ());
 
 bench(
-  ~name="[Incremental] ArrayParser.Delta.create",
+  ~name="[Incremental] JSON -  ArrayParser.Delta.create",
   ~options,
   ~setup,
   ~f=createDelta,
@@ -35,7 +35,7 @@ bench(
 );
 
 bench(
-  ~name="[Incremental] ArrayParser.parse w/ delta update",
+  ~name="[Incremental] JSON -  ArrayParser.parse w/ delta update",
   ~options,
   ~setup,
   ~f=reparse,
