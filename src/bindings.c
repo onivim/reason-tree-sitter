@@ -24,14 +24,12 @@ void finalize_parser(value v) {
   parser_W *p;
   p = (parser_W *)Data_custom_val(v);
   ts_parser_delete(p->parser);
-  printf("finalizing parser: %d\n", p);
 }
 
 void finalize_tree(value v) {
   tree_W *p;
   p = (tree_W *)Data_custom_val(v);
-  //ts_tree_delete(p->tree);
-  printf("finalizing tree: %d\n", p);
+  ts_tree_delete(p->tree);
 }
 
 static struct custom_operations parser_custom_ops = {
@@ -202,8 +200,6 @@ CAMLprim value rets_node_string(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   char *sz = ts_node_string(*node);
-  printf("TREE USED: %d\n", node->tree); 
-  printf("rets_node_string: %s\n", sz);
 
   v = caml_copy_string(sz);
   free(sz);
@@ -358,14 +354,8 @@ CAMLprim value rets_node_child(value vNode, value vX) {
 
   TSNode *node = Data_custom_val(vNode);
   uint32_t idx = Int_val(vX);
-  printf("!!Parent node. Tree is: %d\n", node->tree);
-
-  if (!node->tree) {
-    printf(" !! TREE IS GONE WHY\n");
-  }
-
+  
   TSNode child = ts_node_child(*node, idx);
-  printf("!!GOT CHILD. Tree is: %d\n", child.tree);
   
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &child, sizeof(TSNode));

@@ -20,6 +20,20 @@ describe("Syntax", ({describe, _}) => {
     test("returns error when present", ({expect, _}) => {
       let errors = Syntax.getErrorRanges(errorNode);
       expect.int(List.length(errors)).toBe(1);
+
+      let errorRange = List.hd(errors);
+
+      let startLine = errorRange.startPosition.line;
+      let endLine = errorRange.endPosition.line;
+
+      let startColumn = errorRange.startPosition.column;
+      let endColumn = errorRange.endPosition.column;
+      
+      expect.int(startLine).toBe(0);
+      expect.int(endLine).toBe(0);
+      
+      expect.int(startColumn).toBe(2);
+      expect.int(endColumn).toBe(3);
     });
   });
 });
