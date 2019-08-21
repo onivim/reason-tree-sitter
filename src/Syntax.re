@@ -56,15 +56,14 @@ module Token = {
   };
 
   let show = (v: t) => {
-
     switch (v) {
     | NamedToken(p, scopes, s) =>
       let scopes = String.concat(".", scopes) ++ ".";
 
-      "NamedToken(" ++ Position.show(p) ++ ":" ++ scopes ++ s ++ ")"
+      "NamedToken(" ++ Position.show(p) ++ ":" ++ scopes ++ s ++ ")";
     | UnnamedToken(p, scopes, tok) =>
       let scopes = String.concat(".", scopes) ++ ".";
-      "UnnamedToken(" ++ Position.show(p) ++ ":" ++ scopes ++ tok ++ ")"
+      "UnnamedToken(" ++ Position.show(p) ++ ":" ++ scopes ++ tok ++ ")";
     };
   };
 };
@@ -126,11 +125,16 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
       | 0 => [Token.ofNode(~getTokenName, List.rev(scopes), n), ...tokens]
       | _ =>
         let children = Node.getChildren(n);
-        let newScopes = switch (Node.isNamed(n)) {
-        | false => scopes
-        | true => [Node.getType(n), ...scopes]
-        };
-        List.fold_left((prev, curr) => f(curr, prev, newScopes), tokens, children);
+        let newScopes =
+          switch (Node.isNamed(n)) {
+          | false => scopes
+          | true => [Node.getType(n), ...scopes]
+          };
+        List.fold_left(
+          (prev, curr) => f(curr, prev, newScopes),
+          tokens,
+          children,
+        );
       };
     };
   };
