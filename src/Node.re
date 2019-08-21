@@ -31,17 +31,24 @@ external getEndPoint: t => Position.t = "rets_node_end_point";
 
 let getChildren = (node: t) => {
   let i = ref(0);
-  let count = Node.getChildCount(node);
+  print_endline ("getting count...");
+  let count = getChildCount(node);
+  print_endline ("got count: " ++ string_of_int(count));
 
   let children = ref([]);
 
   while (i^ < count) {
-    let child = Node.getChild(node, i^);
+    print_endline ("getChild...");
+    let child = getChild(node, i^);
+    print_endline ("after getChild");
+
+    print_endline ("CHILD: " ++ toString(child));
+    
     children := [child, ...children^];
-    incr(child);
+    incr(i);
   }
 
-  List.rev(children);
+  List.rev(children^);
 };
 
 let getRange = (node: t) => {
