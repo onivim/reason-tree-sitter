@@ -218,14 +218,134 @@ CAMLprim value rets_node_type(value vNode) {
   CAMLreturn(v);
 };
 
-CAMLprim value rets_node_child_count(value vNode) {
+CAMLprim value rets_node_symbol(value vNode) {
+
   CAMLparam1(vNode);
   CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSSymbol sym = ts_node_symbol(*node);
+  CAMLreturn(Val_int(sym));
+}
+
+CAMLprim value rets_node_is_error(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSSymbol sym = ts_node_symbol(*node);
+  int isError = sym == ((TSSymbol)-1);
+  CAMLreturn(Val_bool(isError));
+}
+
+CAMLprim value rets_node_has_changes(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  int hasChanges = ts_node_has_changes(*node);
+
+  CAMLreturn(Val_bool(hasChanges));
+}
+
+CAMLprim value rets_node_has_error(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  int hasError = ts_node_has_error(*node);
+
+  CAMLreturn(Val_bool(hasError));
+}
+
+CAMLprim value rets_node_is_missing(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  int isMissing = ts_node_has_error(*node);
+
+  CAMLreturn(Val_bool(isMissing));
+}
+
+CAMLprim value rets_node_is_null(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  int isNull = ts_node_has_error(*node);
+
+  CAMLreturn(Val_bool(isNull));
+}
+
+CAMLprim value rets_node_is_named(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  int isNamed = ts_node_has_error(*node);
+
+  CAMLreturn(Val_bool(isNamed));
+}
+
+CAMLprim value rets_node_is_extra(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  int isExtra = ts_node_has_error(*node);
+
+  CAMLreturn(Val_bool(isExtra));
+}
+
+CAMLprim value rets_node_child_count(value vNode) {
+  CAMLparam1(vNode);
 
   TSNode *node = Data_custom_val(vNode);
   uint32_t c = ts_node_child_count(*node);
 
   CAMLreturn(Val_int(c));
+};
+
+CAMLprim value rets_node_end_byte(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t endByte = ts_node_end_byte(*node);
+
+  CAMLreturn(Val_int(endByte));
+};
+
+CAMLprim value rets_node_start_point(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSPoint startPoint = ts_node_start_point(*node);
+
+  v = caml_alloc(2, 0);
+  Store_field(v, 0, Val_int(startPoint.row));
+  Store_field(v, 1, Val_int(startPoint.column));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_end_point(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSPoint endPoint = ts_node_end_point(*node);
+
+  v = caml_alloc(2, 0);
+  Store_field(v, 0, Val_int(endPoint.row));
+  Store_field(v, 1, Val_int(endPoint.column));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_start_byte(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  uint32_t startByte = ts_node_end_byte(*node);
+
+  CAMLreturn(Val_int(startByte));
 };
 
 CAMLprim value rets_node_child(value vNode, value vX) {
@@ -238,6 +358,66 @@ CAMLprim value rets_node_child(value vNode, value vX) {
   TSNode child = ts_node_child(*node, idx);
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &child, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_next_sibling(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSNode nextSibling = ts_node_next_sibling(*node);
+
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &nextSibling, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_prev_sibling(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSNode prevSibling = ts_node_prev_sibling(*node);
+
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &prevSibling, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_descendant_for_point_range(value vNode,
+                                                    value vStartRow,
+                                                    value vStartColumn,
+                                                    value vEndRow,
+                                                    value vEndColumn) {
+  CAMLparam5(vNode, vStartRow, vStartColumn, vEndRow, vEndColumn);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+
+  TSPoint start;
+  TSPoint end;
+  start.row = Int_val(vStartRow);
+  start.column = Int_val(vStartColumn);
+
+  end.row = Int_val(vEndRow);
+  end.column = Int_val(vEndColumn);
+
+  TSNode descendant = ts_node_descendant_for_point_range(*node, start, end);
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &descendant, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_node_parent(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSNode parent = ts_node_parent(*node);
+
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &parent, sizeof(TSNode));
   CAMLreturn(v);
 };
 
