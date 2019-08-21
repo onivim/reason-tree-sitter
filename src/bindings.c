@@ -233,7 +233,7 @@ CAMLprim value rets_node_is_error(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   TSSymbol sym = ts_node_symbol(*node);
-  int isError = sym == ((TSSymbol) - 1);
+  int isError = sym == ((TSSymbol)-1);
   CAMLreturn(Val_bool(isError));
 }
 
@@ -367,7 +367,7 @@ CAMLprim value rets_node_next_sibling(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   TSNode nextSibling = ts_node_next_sibling(*node);
-  
+
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &nextSibling, sizeof(TSNode));
   CAMLreturn(v);
@@ -379,18 +379,17 @@ CAMLprim value rets_node_prev_sibling(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   TSNode prevSibling = ts_node_prev_sibling(*node);
-  
+
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &prevSibling, sizeof(TSNode));
   CAMLreturn(v);
 };
 
-CAMLprim value rets_node_descendant_for_point_range(
-  value vNode, 
-  value vStartRow,
-  value vStartColumn,
-  value vEndRow,
-  value vEndColumn) {
+CAMLprim value rets_node_descendant_for_point_range(value vNode,
+                                                    value vStartRow,
+                                                    value vStartColumn,
+                                                    value vEndRow,
+                                                    value vEndColumn) {
   CAMLparam5(vNode, vStartRow, vStartColumn, vEndRow, vEndColumn);
   CAMLlocal1(v);
 
