@@ -11,6 +11,10 @@ module Position = {
   };
 
   let create = (~line, ~column, ()) => {line, column};
+
+  let show = (v: t) => {
+    string_of_int(v.line) ++ "," ++ string_of_int(v.column)
+  }
 };
 
 module Range = {
