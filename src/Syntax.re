@@ -93,15 +93,24 @@ let getTokens = (~range: Range.t, node: Node.t) => {
     range.endPosition.line,
     range.endPosition.column);
 
-  let rec f = (node: Node.t, tokens: list(Token.t)) => {
-    let childCount = Node.getChildCount(node);
+  let rec f = (n: Node.t, tokens: list(Token.t)) => {
+
+    let startPosition = Node.getStartPoint(n);
+    let endPosition = Node.getEndPoint(n);
+
+    if (!Range.isInRange(range, startPosition) && !Range.isInRange(range, endPosition)) {
+      tokens
+    } else {
+
+    let childCount = Node.getChildCount(n);
 
     switch (childCount) {
-    | 0 => [Token.ofNode(node), ...tokens]
-    | _ =>  let children = Node.getChildren(node);
+    | 0 => [Token.ofNode(n), ...tokens]
+    | _ =>  let children = Node.getChildren(n);
     List.fold_left((prev, curr) => {
       f(curr, prev); 
     }, tokens, children);
+    }
     }
   };
 

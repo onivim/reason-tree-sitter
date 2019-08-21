@@ -27,4 +27,13 @@ module Range = {
     startPosition,
     endPosition,
   };
+
+  let isInRange = (range: t, position: Position.t) => {
+    ((position.line == range.startPosition.line &&
+    position.column >= range.startPosition.column) 
+    || position.line > range.startPosition.line)
+    &&
+    ((position.line == range.endPosition.line && position.column <= range.endPosition.column)
+    || position.line < range.endPosition.line)
+  };
 };

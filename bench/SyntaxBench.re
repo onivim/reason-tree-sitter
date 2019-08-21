@@ -17,7 +17,7 @@ let fullRange = Range.create(
 
 let subRange = Range.create(
     ~startPosition=Position.create(~line=3, ~column=0, ()),
-    ~endPosition=Position.create(~line=3, ~column=500, ()),
+    ~endPosition=Position.create(~line=3, ~column=50, ()),
     ());
 
 let getTokens = (range, node: Node.t, ()) => {
