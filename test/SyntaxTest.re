@@ -11,6 +11,11 @@ describe("Syntax", ({describe, _}) => {
   let errorNode = Tree.getRootNode(tree);
   // "(value (array (number) (string (string_content))))",
 
+ let range = Types.Range.create(
+  ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
+  ~endPosition=Types.Position.create(~line=1, ~column=0, ()),
+  ());
+
   describe("getErrorRanges", ({test, _}) => {
     test("returns empty list when none", ({expect, _}) => {
       let errors = Syntax.getErrorRanges(simpleNode);
@@ -37,14 +42,14 @@ describe("Syntax", ({describe, _}) => {
   });
   describe("getTokens", ({test, _}) => {
    test("returns list of tokens in success case", ({expect, _}) => {
-    let tokens = Syntax.getTokens(simpleNode);
+    let tokens = Syntax.getTokens(~range, simpleNode);
 
     List.iter((v) => prerr_endline(Syntax.Token.show(v)), tokens);
     expect.int(List.length(tokens)).toBe(5);
    });
    test("returns list of tokens in error case", ({expect, _}) => {
     prerr_endline ("--ERROR--");
-    let tokens = Syntax.getTokens(errorNode);
+    let tokens = Syntax.getTokens(~range, errorNode);
 
     List.iter((v) => prerr_endline(Syntax.Token.show(v)), tokens);
     expect.int(List.length(tokens)).toBe(4);

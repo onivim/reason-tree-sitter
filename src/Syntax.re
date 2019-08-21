@@ -84,7 +84,15 @@ let getParentScopes = (node: Node.t) => {
   f(node, []);
 };
 
-let getTokens = (node: Node.t) => {
+let getTokens = (~range: Range.t, node: Node.t) => {
+
+  let nodeToUse = Node.getDescendantForPointRange(
+    node,
+    range.startPosition.line,
+    range.startPosition.column,
+    range.endPosition.line,
+    range.endPosition.column);
+
   let rec f = (node: Node.t, tokens: list(Token.t)) => {
     let childCount = Node.getChildCount(node);
 
@@ -97,5 +105,5 @@ let getTokens = (node: Node.t) => {
     }
   };
 
-  f(node, []);
+  f(nodeToUse, []);
 };
