@@ -261,7 +261,7 @@ CAMLprim value rets_node_is_missing(value vNode) {
   CAMLlocal1(v);
 
   TSNode *node = Data_custom_val(vNode);
-  int isMissing = ts_node_has_error(*node);
+  int isMissing = ts_node_is_missing(*node);
 
   CAMLreturn(Val_bool(isMissing));
 }
@@ -270,7 +270,7 @@ CAMLprim value rets_node_is_null(value vNode) {
   CAMLparam1(vNode);
 
   TSNode *node = Data_custom_val(vNode);
-  int isNull = ts_node_has_error(*node);
+  int isNull = ts_node_is_null(*node);
 
   CAMLreturn(Val_bool(isNull));
 }
@@ -280,7 +280,7 @@ CAMLprim value rets_node_is_named(value vNode) {
   CAMLlocal1(v);
 
   TSNode *node = Data_custom_val(vNode);
-  int isNamed = ts_node_has_error(*node);
+  int isNamed = ts_node_is_named(*node);
 
   CAMLreturn(Val_bool(isNamed));
 }
