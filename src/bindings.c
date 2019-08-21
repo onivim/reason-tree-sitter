@@ -11,6 +11,7 @@
 
 // External syntaxes
 TSLanguage *tree_sitter_json();
+TSLanguage *tree_sitter_c();
 
 typedef struct _parser {
   TSParser *parser;
@@ -70,6 +71,20 @@ CAMLprim value rets_parser_new_json(value unit) {
   v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
   memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
   ts_parser_set_language(parser, tree_sitter_json());
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_parser_new_c(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_c());
   CAMLreturn(v);
 };
 

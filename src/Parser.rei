@@ -7,6 +7,9 @@ type t;
 /* [json()] returns a new JSON parser */
 let json: unit => t;
 
+/* [c()] returns a new C/C++ parser */
+let c: unit => t;
+
 /*
    [parseString(parser, contents)] parses a string with [parser],
    returning a parsed syntax tree.

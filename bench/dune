@@ -8,4 +8,4 @@
 (install
     (section bin)
     (package treesitter-bench)
-    (files canada.json))
+    (files canada.json sqlite3.c))
