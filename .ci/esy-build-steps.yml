@@ -22,3 +22,7 @@ steps:
     displayName: 'test: esy run - iteration 4'
   - script: esy @test run
     displayName: 'test: esy run - iteration 5'
+  - script: esy @bench install
+    displayName: 'bench: esy install'
+  - script: esy @bench run
+    displayName: 'bench: esy run'

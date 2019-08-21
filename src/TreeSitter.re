@@ -3,3 +3,4 @@ module Node = Node;
 module Tree = Tree;
 module Parser = Parser;
 module Syntax = Syntax;
+module Types = Types;

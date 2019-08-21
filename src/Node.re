@@ -60,6 +60,12 @@ let getChild = (v: t, idx) => {
   (tree, _getChild(node, idx));
 };
 
+let getParent: t => t =
+  (v: t) => {
+    let (tree, node) = v;
+    (tree, _getParent(node));
+  };
+
 let getNamedChildCount: t => int = wrap0(_getNamedChildCount);
 
 let getNamedChild = (v: t, idx) => {
