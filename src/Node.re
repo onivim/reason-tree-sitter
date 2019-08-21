@@ -111,7 +111,7 @@ let getChildren = (node: t) => {
     let child = getChild(node, i^);
     children := [child, ...children^];
     incr(i);
-  }
+  };
 
   List.rev(children^);
 };

@@ -3,7 +3,6 @@ open TestFramework;
 open Treesitter;
 
 describe("Syntax", ({describe, _}) => {
-
   let jsonParser = Parser.json();
   let (tree, _) = ArrayParser.parse(jsonParser, None, [|"[1, 2]"|]);
   let simpleNode = Tree.getRootNode(tree);
@@ -28,10 +27,10 @@ describe("Syntax", ({describe, _}) => {
 
       let startColumn = errorRange.startPosition.column;
       let endColumn = errorRange.endPosition.column;
-      
+
       expect.int(startLine).toBe(0);
       expect.int(endLine).toBe(0);
-      
+
       expect.int(startColumn).toBe(2);
       expect.int(endColumn).toBe(3);
     });
