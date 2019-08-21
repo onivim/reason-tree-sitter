@@ -354,9 +354,9 @@ CAMLprim value rets_node_child(value vNode, value vX) {
 
   TSNode *node = Data_custom_val(vNode);
   uint32_t idx = Int_val(vX);
-  
+
   TSNode child = ts_node_child(*node, idx);
-  
+
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &child, sizeof(TSNode));
   CAMLreturn(v);
