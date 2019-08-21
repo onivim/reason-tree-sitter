@@ -24,7 +24,7 @@ describe("Parser", ({describe, _}) => {
       expect.int(callCount^).toBe(1);
     });
   });
-  describe("json", ({test, _}) => {
+  describe("json", ({test, _}) =>
     test("finalizer gets called", ({expect, _}) => {
       let jsonParser = Parser.json();
       let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
@@ -49,8 +49,8 @@ describe("Parser", ({describe, _}) => {
       expect.string(Node.getType(array0)).toEqual("number");
       expect.string(Node.getType(array1)).toEqual("string");
     })
-  });
-  describe("c", ({test, _}) => {
+  );
+  describe("c", ({test, _}) =>
     test("basic parse case", ({expect, _}) => {
       let jsonParser = Parser.c();
       let tree = Parser.parseString(jsonParser, "int main() { return 1; }");
@@ -59,8 +59,8 @@ describe("Parser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-      "(translation_unit (function_definition type: (primitive_type) declarator: (function_declarator declarator: (identifier) parameters: (parameter_list)) body: (compound_statement (return_statement (number_literal)))))"
+        "(translation_unit (function_definition type: (primitive_type) declarator: (function_declarator declarator: (identifier) parameters: (parameter_list)) body: (compound_statement (return_statement (number_literal)))))",
       );
     })
-  });
+  );
 });

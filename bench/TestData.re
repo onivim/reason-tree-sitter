@@ -8,7 +8,7 @@ let read_file = filename => {
       while (true) {
         // print_endline("Reading line...");
         lines := [input_line(chan), ...lines^];
-        // print_endline("Line read!");
+                                                // print_endline("Line read!");
       };
       lines^;
     }
@@ -29,5 +29,3 @@ let largeC = read_file(dir ++ "/" ++ "sqlite3.c");
 let largeCString = largeC |> String.concat("\n");
 let largeCArray = largeC |> Array.of_list;
 print_endline("Finished loading.");
-
-

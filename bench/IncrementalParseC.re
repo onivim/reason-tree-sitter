@@ -5,19 +5,29 @@ Printexc.record_backtrace(true);
 
 let cParser = Parser.c();
 
-let (_, baseline) =
-  ArrayParser.parse(cParser, None, TestData.largeCArray);
+let (_, baseline) = ArrayParser.parse(cParser, None, TestData.largeCArray);
 
 let createDelta = () => {
-  let _ = ArrayParser.Delta.create(baseline, 190279, 190280, [|"#define A", "#define B"|]);
+  let _ =
+    ArrayParser.Delta.create(
+      baseline,
+      190279,
+      190280,
+      [|"#define A", "#define B"|],
+    );
   ();
 };
 
- let delta = ArrayParser.Delta.create(baseline, 190279, 190280, [|"#define A", "#define B"|]);
+let delta =
+  ArrayParser.Delta.create(
+    baseline,
+    190279,
+    190280,
+    [|"#define A", "#define B"|],
+  );
 
 let reparse = () => {
-  let _ =
-    ArrayParser.parse(cParser, Some(delta), TestData.largeCArray);
+  let _ = ArrayParser.parse(cParser, Some(delta), TestData.largeCArray);
   ();
 };
 

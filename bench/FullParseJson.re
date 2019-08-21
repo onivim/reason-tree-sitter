@@ -31,13 +31,7 @@ bench(
   (),
 );
 
-bench(
-  ~name="parseString: Small C",
-  ~options,
-  ~setup,
-  ~f=parse(simpleC),
-  (),
-);
+bench(~name="parseString: Small C", ~options, ~setup, ~f=parse(simpleC), ());
 
 bench(
   ~name="parseString: Large JSON (canada.json)",
