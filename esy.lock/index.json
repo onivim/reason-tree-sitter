@@ -1,5 +1,5 @@
 {
-  "checksum": "450bc37251cf64cf02f8742ca2edecb1",
+  "checksum": "68f4b52cc752e56f42d2d55cb7c00ed9",
   "root": "reason-tree-sitter@link-dev:./package.json",
   "node": {
     "reperf@1.4.0@d41d8cd9": {
@@ -53,7 +53,7 @@
       "overrides": [],
       "dependencies": [
         "reperf@1.4.0@d41d8cd9", "refmterr@3.2.2@d41d8cd9",
-        "ocaml@4.7.1004@d41d8cd9", "esy-tree-sitter@1.3.0@d41d8cd9",
+        "ocaml@4.7.1004@d41d8cd9", "esy-tree-sitter@1.4.0@d41d8cd9",
         "@reason-native/rely@1.3.1@d41d8cd9",
         "@opam/dune@opam:1.7.0@2dd70b87", "@esy-ocaml/reason@3.4.0@d41d8cd9"
       ],
@@ -73,14 +73,14 @@
       "dependencies": [],
       "devDependencies": []
     },
-    "esy-tree-sitter@1.3.0@d41d8cd9": {
-      "id": "esy-tree-sitter@1.3.0@d41d8cd9",
+    "esy-tree-sitter@1.4.0@d41d8cd9": {
+      "id": "esy-tree-sitter@1.4.0@d41d8cd9",
       "name": "esy-tree-sitter",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://registry.npmjs.org/esy-tree-sitter/-/esy-tree-sitter-1.3.0.tgz#sha1:ff362fcb5d54309771470354e2a3c47fb52c034c"
+          "archive:https://registry.npmjs.org/esy-tree-sitter/-/esy-tree-sitter-1.4.0.tgz#sha1:41bf143d3913b87be95f141571ac1b99e8c8c9f7"
         ]
       },
       "overrides": [],
