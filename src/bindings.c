@@ -234,7 +234,7 @@ CAMLprim value rets_node_has_changes(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int hasChanges = ts_node_has_changes(*node);
-  
+
   CAMLreturn(Val_bool(hasChanges));
 }
 
@@ -244,7 +244,7 @@ CAMLprim value rets_node_has_error(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int hasError = ts_node_has_error(*node);
-  
+
   CAMLreturn(Val_bool(hasError));
 }
 
@@ -254,7 +254,7 @@ CAMLprim value rets_node_is_missing(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int isMissing = ts_node_has_error(*node);
-  
+
   CAMLreturn(Val_bool(isMissing));
 }
 
@@ -264,7 +264,7 @@ CAMLprim value rets_node_is_null(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int isNull = ts_node_has_error(*node);
-  
+
   CAMLreturn(Val_bool(isNull));
 }
 
@@ -274,7 +274,7 @@ CAMLprim value rets_node_is_named(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int isNamed = ts_node_has_error(*node);
-  
+
   CAMLreturn(Val_bool(isNamed));
 }
 
@@ -284,7 +284,7 @@ CAMLprim value rets_node_is_extra(value vNode) {
 
   TSNode *node = Data_custom_val(vNode);
   int isExtra = ts_node_has_error(*node);
-  
+
   CAMLreturn(Val_bool(isExtra));
 }
 
@@ -316,8 +316,8 @@ CAMLprim value rets_node_parent(value vNode) {
   CAMLlocal1(v);
 
   TSNode *node = Data_custom_val(vNode);
+  TSNode parent = ts_node_parent(*node);
 
-  TSNode parent = ts_node_parent(*node, idx);
   v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
   memcpy(Data_custom_val(v), &parent, sizeof(TSNode));
   CAMLreturn(v);
