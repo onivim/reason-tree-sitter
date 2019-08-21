@@ -4,12 +4,9 @@
      Stubs for bindings to the `TSTree` object
  */
 
-type t;
+open Types;
 
-type point = {
-  row: int,
-  column: int,
-};
+type t;
 
 external toString: t => string = "rets_node_string";
 
@@ -29,8 +26,30 @@ external getDescendantForPointRange: (t, int, int, int, int) => t =
 external getStartByte: t => int = "rets_node_start_byte";
 external getEndByte: t => int = "rets_node_end_byte";
 
-external getStartPoint: t => point = "rets_node_start_point";
-external getEndPoint: t => point = "rets_node_end_point";
+external getStartPoint: t => Position.t = "rets_node_start_point";
+external getEndPoint: t => Position.t = "rets_node_end_point";
+
+let getChildren = (node: t) => {
+  let i = ref(0);
+  let count = Node.getChildCount(node);
+
+  let children = ref([]);
+
+  while (i^ < count) {
+    let child = Node.getChild(node, i^);
+    children := [child, ...children^];
+    incr(child);
+  }
+
+  List.rev(children);
+};
+
+let getRange = (node: t) => {
+  let startPosition = getStartPoint(node);
+  let endPosition = getEndPoint(node);
+
+  Range.create(~startPosition, ~endPosition, ());
+};
 
 external hasChanges: t => bool = "rets_node_has_changes";
 external hasError: t => bool = "rets_node_has_error";
