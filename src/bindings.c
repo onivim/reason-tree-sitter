@@ -311,6 +311,31 @@ CAMLprim value rets_node_child(value vNode, value vX) {
   CAMLreturn(v);
 };
 
+CAMLprim value rets_node_descendant_for_point_range(
+  value vNode, 
+  value vStartRow,
+  value vStartColumn,
+  value vEndRow,
+  value vEndColumn) {
+  CAMLparam5(vNode, vStartRow, vStartColumn, vEndRow, vEndColumn);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+
+  TSPoint start;
+  TSPoint end;
+  start.row = Int_val(vStartRow);
+  start.column = Int_val(vStartColumn);
+
+  end.row = Int_val(vEndRow);
+  end.column = Int_val(vEndColumn);
+
+  TSNode node = ts_node_descendant_for_point_range(*node, start, end);
+  v = caml_alloc_custom(&TSNode_custom_ops, sizeof(TSNode), 0, 1);
+  memcpy(Data_custom_val(v), &node, sizeof(TSNode));
+  CAMLreturn(v);
+};
+
 CAMLprim value rets_node_parent(value vNode) {
   CAMLparam1(vNode);
   CAMLlocal1(v);
