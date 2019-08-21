@@ -52,13 +52,12 @@ external _getSymbol: node => int = "rets_node_symbol";
 external _getType: node => string = "rets_node_type";
 
 let wrap0 = (f, v) => {
-  let (_, node) = v; 
+  let (_, node) = v;
   f(node);
-}
+};
 
 let toString: t => string = wrap0(_toString);
 let getChildCount: t => int = wrap0(_getChildCount);
-
 
 let getChild = (v: t, idx) => {
   let (tree, node) = v;
@@ -72,12 +71,12 @@ let getNamedChild = (v: t, idx) => {
   (tree, _getNamedChild(node, idx));
 };
 
-let getNextSibling = (v) => {
+let getNextSibling = v => {
   let (tree, node) = v;
   (tree, _getNextSibling(node));
 };
 
-let getPrevSibling = (v) => {
+let getPrevSibling = v => {
   let (tree, node) = v;
   (tree, _getPrevSibling(node));
 };
@@ -94,8 +93,8 @@ let getEndByte: t => int = wrap0(_getEndByte);
 let getStartPoint: t => point = wrap0(_getStartPoint);
 let getEndPoint: t => point = wrap0(_getEndPoint);
 
-let hasChanges: t => bool  = wrap0(_hasChanges);
-let hasError: t => bool   = wrap0(_hasError);
+let hasChanges: t => bool = wrap0(_hasChanges);
+let hasError: t => bool = wrap0(_hasError);
 
 let isMissing: t => bool = wrap0(_isMissing);
 let isNull: t => bool = wrap0(_isNull);
