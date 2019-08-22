@@ -4,7 +4,7 @@ open Treesitter;
 
 describe("Syntax", ({describe, _}) => {
   let jsonParser = Parser.json();
-  let simpleArray = [|"[1, \"2\"]"|];
+  let simpleArray = [|"[1, \"200\"]"|];
   let (tree, _) = ArrayParser.parse(jsonParser, None, simpleArray);
   let simpleNode = Tree.getRootNode(tree);
   let simpleNameResolver = Syntax.createArrayTokenNameResolver(simpleArray);
