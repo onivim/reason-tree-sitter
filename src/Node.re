@@ -75,12 +75,12 @@ let getNamedChild = (v: t, idx) => {
 
 let getNamedIndex = (v: t) => {
   let (_, node) = v;
-  _getNamedIndex(idx);
+  _getNamedIndex(node);
 }
 
 let getIndex = (v: t) => {
   let (_, node) = v;
-  _getIndex(idx);
+  _getIndex(node);
 }
 
 let getDescendantForPointRange = (v: t, r0, c0, r1, c1) => {
