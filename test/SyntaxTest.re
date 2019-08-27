@@ -77,7 +77,7 @@ describe("Syntax", ({describe, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let scopes = Syntax.getParentScopes(firstChild);
 
-      expect.bool(scopes == [(0,  "value")]).toBe(true);
+      expect.bool(scopes == [(0, "value")]).toBe(true);
     });
     test("returns multiple item for second child", ({expect, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);

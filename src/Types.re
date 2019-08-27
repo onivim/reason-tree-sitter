@@ -42,7 +42,9 @@ module Range = {
   };
 
   let show = (v: t) => {
-    "Range - start: " ++ Position.show(v.startPosition) ++ " end: " ++ 
-      Position.show(v.endPosition);
-  }
+    "Range - start: "
+    ++ Position.show(v.startPosition)
+    ++ " end: "
+    ++ Position.show(v.endPosition);
+  };
 };

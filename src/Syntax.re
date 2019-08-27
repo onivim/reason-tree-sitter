@@ -61,14 +61,14 @@ module Token = {
 
   let _showScope = (scope: scope) => {
     let (idx, s) = scope;
-    "(" ++ string_of_int(idx) ++ ":" ++ s ++ ")"
+    "(" ++ string_of_int(idx) ++ ":" ++ s ++ ")";
   };
 
   let show = (v: t) => {
     let (p, scopes, tok) = v;
     let stringScopes = List.map(_showScope, scopes);
     let scopes = String.concat(".", stringScopes);
-    "Token(" ++ Position.show(p) ++ ":" ++ scopes ++ "|" ++  tok ++ ")";
+    "Token(" ++ Position.show(p) ++ ":" ++ scopes ++ "|" ++ tok ++ ")";
   };
 };
 
@@ -80,39 +80,37 @@ let getParentScopes = (node: Node.t) => {
       scopes;
     } else {
       Node.isNamed(parent)
-        ? f(parent, [(0,  Node.getType(parent)), ...scopes]) : f(parent, scopes);
+        ? f(parent, [(0, Node.getType(parent)), ...scopes])
+        : f(parent, scopes);
     };
   };
 
   f(node, []);
 };
 
-let createArrayTokenNameResolver = (v: array(string), range: Range.t) => {
+let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
   if (range.startPosition.line != range.endPosition.line) {
     "";
+  } else if (range.startPosition.line >= Array.length(v)) {
+    "";
   } else {
-     if (range.startPosition.line >= Array.length(v)) {
-      ""
-    } else {
-      let lineNumber = range.startPosition.line;
-      let line = v[lineNumber];
-      
-      let len = String.length(line);
+    let lineNumber = range.startPosition.line;
+    let line = v[lineNumber];
 
-      if (len == 0 || range.startPosition.column == range.endPosition.column) {
-        ""
-      } else {
-        "\""
-        ++ String.sub(
-             line,
-             range.startPosition.column,
-             range.endPosition.column - range.startPosition.column,
-           )
-        ++ "\"";
-      }
-    }
+    let len = String.length(line);
+
+    if (len == 0 || range.startPosition.column == range.endPosition.column) {
+      "";
+    } else {
+      "\""
+      ++ String.sub(
+           line,
+           range.startPosition.column,
+           range.endPosition.column - range.startPosition.column,
+         )
+      ++ "\"";
+    };
   };
-};
 
 let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
   let nodeToUse =
@@ -130,17 +128,18 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
     let startPosition = Node.getStartPoint(n);
     let endPosition = Node.getEndPoint(n);
 
-    if (
-          (endPosition.line < range.startPosition.line)
-          || (endPosition.line == range.startPosition.line && endPosition.column < range.startPosition.column)
-          || (startPosition.line > range.endPosition.line) 
-          || (startPosition.line == range.endPosition.line && endPosition.column > range.endPosition.column)) {
+    if (endPosition.line < range.startPosition.line
+        || endPosition.line == range.startPosition.line
+        && endPosition.column < range.startPosition.column
+        || startPosition.line > range.endPosition.line
+        || startPosition.line == range.endPosition.line
+        && endPosition.column > range.endPosition.column) {
       tokens;
     } else {
       let childCount = Node.getChildCount(n);
 
       switch (childCount) {
-      | 0 => [ Token.ofNode(~getTokenName, scopes, n), ...tokens]
+      | 0 => [Token.ofNode(~getTokenName, scopes, n), ...tokens]
       | _ =>
         let children = Node.getChildren(n);
         let newScopes =
@@ -148,19 +147,20 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
           | false => scopes
           | true => [(index, Node.getType(n)), ...scopes]
           };
-        let (_, tokens) = List.fold_left(
-          (prev, curr) => {
-            let (index, tokens) = prev;
-            let newTokens = f(index + 1, curr, tokens, newScopes);
-            (index + 1, newTokens); 
-          },
-          (0, tokens),
-          children,
-        );
+        let (_, tokens) =
+          List.fold_left(
+            (prev, curr) => {
+              let (index, tokens) = prev;
+              let newTokens = f(index + 1, curr, tokens, newScopes);
+              (index + 1, newTokens);
+            },
+            (0, tokens),
+            children,
+          );
         tokens;
       };
     };
   };
 
-  f(0,  nodeToUse, [], parentScopes) |> List.rev;
+  f(0, nodeToUse, [], parentScopes) |> List.rev;
 };
