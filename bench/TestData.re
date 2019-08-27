@@ -3,7 +3,7 @@ let dir = Filename.dirname(Sys.argv[0]);
 let read_file = filename => {
   let lines = ref([]);
   let chan = open_in(filename);
-  try (
+  try(
     {
       while (true) {
         // print_endline("Reading line...");
