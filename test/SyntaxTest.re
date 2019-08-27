@@ -15,6 +15,10 @@ describe("Syntax", ({describe, _}) => {
   let errorNameResolver = Syntax.createArrayTokenNameResolver(errorArray);
   // "(value (array (number) (string (string_content))))",
 
+  let objectArray = [|"{ \"key\": \"value\" "|];
+  let (tree, _) = ArrayParser.parse(jsonParser, None, objectArray);
+  let objectNode = Tree.getRootNode(tree);
+  let objectNameResolver = Syntax.createArrayTokenNameResolver(objectArray);
   let range =
     Types.Range.create(
       ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
@@ -47,7 +51,20 @@ describe("Syntax", ({describe, _}) => {
     });
   });
   describe("getTokens", ({test, _}) => {
+    test("returns list of tokens for object in  success case", ({expect, _}) => {
+      prerr_endline("--OBJECT--");
+      let tokens =
+        Syntax.getTokens(
+          ~getTokenName=objectNameResolver,
+          ~range,
+          objectNode,
+        );
+
+      List.iter(v => prerr_endline(Syntax.Token.show(v)), tokens);
+      expect.int(List.length(tokens)).toBe(9);
+    });
     test("returns list of tokens in success case", ({expect, _}) => {
+      prerr_endline("--ARRAY--");
       let tokens =
         Syntax.getTokens(
           ~getTokenName=simpleNameResolver,
@@ -77,16 +94,14 @@ describe("Syntax", ({describe, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let scopes = Syntax.getParentScopes(firstChild);
 
-      expect.bool(scopes == ["value"]).toBe(true);
+      expect.bool(scopes == [(0, "value")]).toBe(true);
     });
     test("returns multiple item for second child", ({expect, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let secondChild = Node.getChild(firstChild, 0);
       let scopes = Syntax.getParentScopes(secondChild);
 
-      List.iter(s => prerr_endline("SCOPE: " ++ s), scopes);
-
-      expect.bool(scopes == ["value", "array"]).toBe(true);
+      expect.bool(scopes == [(0, "value"), (0, "array")]).toBe(true);
     });
   });
 });

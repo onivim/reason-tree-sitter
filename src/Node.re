@@ -23,8 +23,9 @@ external _getParent: node => node = "rets_node_parent";
 external _getNamedChildCount: node => int = "rets_node_named_child_count";
 external _getNamedChild: (node, int) => node = "rets_node_named_child";
 
-external _getNextSibling: node => int = "rets_node_next_sibling";
-external _getPrevSibling: node => int = "rets_node_prev_sibling";
+external _getBoundedNamedIndex: node => int = "rets_node_bounded_named_index";
+external _getNamedIndex: node => int = "rets_node_named_index";
+external _getIndex: node => int = "rets_node_index";
 
 external _getDescendantForPointRange: (node, int, int, int, int) => node =
   "rets_node_descendant_for_point_range";
@@ -73,14 +74,19 @@ let getNamedChild = (v: t, idx) => {
   (tree, _getNamedChild(node, idx));
 };
 
-let getNextSibling = v => {
-  let (tree, node) = v;
-  (tree, _getNextSibling(node));
+let getBoundedNamedIndex = (v: t) => {
+  let (_, node) = v;
+  _getBoundedNamedIndex(node);
 };
 
-let getPrevSibling = v => {
-  let (tree, node) = v;
-  (tree, _getPrevSibling(node));
+let getNamedIndex = (v: t) => {
+  let (_, node) = v;
+  _getNamedIndex(node);
+};
+
+let getIndex = (v: t) => {
+  let (_, node) = v;
+  _getIndex(node);
 };
 
 let getDescendantForPointRange = (v: t, r0, c0, r1, c1) => {
