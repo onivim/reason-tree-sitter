@@ -12,6 +12,39 @@ describe("Node", ({describe, _}) => {
   let errorNode = Tree.getRootNode(tree);
   // "(value (array (number) (string (string_content))))",
 
+  describe("getIndex / getNamedIndex", ({test, _}) => {
+    test("getNamedIndex returns correct values", ({expect, _}) => {
+        let firstChild = Node.getNamedChild(simpleNode, 0);
+        let child1 = Node.getNamedChild(firstChild, 0);
+        let child2 = Node.getNamedChild(firstChild, 1);
+
+        expect.int(Node.getNamedIndex(child1)).toBe(0);
+        expect.int(Node.getNamedIndex(child2)).toBe(1);
+
+        //print_endline ("CHILDREN: " ++ string_of_int(Node.getNamedChildCount(firstChild)));
+        //let _secondNamedChild = Node.getNamedChild(simpleNode, 1);
+        //let thirdNamedChild = Node.getNamedChild(simpleNode, 1);
+        //print_endline ("3: " ++ Node.toString(thirdNamedChild));
+
+        //expect.int(0).toBe(1);
+    });
+    test("getIndex returns correct values", ({expect, _}) => {
+        let firstChild = Node.getNamedChild(simpleNode, 0);
+        let child1 = Node.getChild(firstChild, 0);
+        let child2 = Node.getChild(firstChild, 1);
+
+        expect.int(Node.getIndex(child1)).toBe(0);
+        expect.int(Node.getIndex(child2)).toBe(1);
+
+        //print_endline ("CHILDREN: " ++ string_of_int(Node.getNamedChildCount(firstChild)));
+        //let _secondNamedChild = Node.getNamedChild(simpleNode, 1);
+        //let thirdNamedChild = Node.getNamedChild(simpleNode, 1);
+        //print_endline ("3: " ++ Node.toString(thirdNamedChild));
+
+        //expect.int(0).toBe(1);
+    });
+  });
+
   describe("getDescendantForPointRange", ({test, _}) => {
     test("gets single line", ({expect, _}) => {
       let line2Node = Node.getDescendantForPointRange(simpleNode, 1, 0, 1, 3);
