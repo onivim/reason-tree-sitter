@@ -40,4 +40,9 @@ module Range = {
       || position.line < range.endPosition.line
     );
   };
+
+  let show = (v: t) => {
+    "Range - start: " ++ Position.show(v.startPosition) ++ " end: " ++ 
+      Position.show(v.endPosition);
+  }
 };
