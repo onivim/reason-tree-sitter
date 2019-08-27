@@ -23,6 +23,7 @@ external _getParent: node => node = "rets_node_parent";
 external _getNamedChildCount: node => int = "rets_node_named_child_count";
 external _getNamedChild: (node, int) => node = "rets_node_named_child";
 
+external _getBoundedNamedIndex: node => int = "rets_node_bounded_named_index";
 external _getNamedIndex: node => int = "rets_node_named_index";
 external _getIndex: node => int = "rets_node_index";
 
@@ -71,6 +72,11 @@ let getNamedChildCount: t => int = wrap0(_getNamedChildCount);
 let getNamedChild = (v: t, idx) => {
   let (tree, node) = v;
   (tree, _getNamedChild(node, idx));
+};
+
+let getBoundedNamedIndex = (v: t) => {
+  let (_, node) = v;
+  _getBoundedNamedIndex(node);
 };
 
 let getNamedIndex = (v: t) => {

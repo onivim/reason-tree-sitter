@@ -437,9 +437,23 @@ CAMLprim value rets_node_parent(value vNode) {
   CAMLreturn(v);
 };
 
+CAMLprim value rets_node_bounded_named_index(value vNode) {
+  CAMLparam1(vNode);
+
+  TSNode *node = Data_custom_val(vNode);
+  TSNode prev = ts_node_prev_named_sibling(*node);
+  
+  uint32_t c = 0;
+  while (!ts_node_is_null(prev) && c < 2) {
+    c++;
+    prev = ts_node_prev_named_sibling(prev);
+  }
+
+  CAMLreturn(Val_int(c));
+};
+
 CAMLprim value rets_node_named_index(value vNode) {
   CAMLparam1(vNode);
-  CAMLlocal1(v);
 
   TSNode *node = Data_custom_val(vNode);
   TSNode prev = ts_node_prev_named_sibling(*node);

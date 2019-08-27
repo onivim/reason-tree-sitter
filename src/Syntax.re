@@ -83,7 +83,7 @@ let getParentScopes = (node: Node.t) => {
         ? f(
             parent,
             [
-              (Node.getNamedIndex(parent), Node.getType(parent)),
+              (Node.getBoundedNamedIndex(parent), Node.getType(parent)),
               ...scopes,
             ],
           )
@@ -158,7 +158,7 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
             (prev, curr) => {
               let (index, tokens) = prev;
               let idx =
-                Node.isNamed(curr) ? Node.getNamedIndex(curr) : index;
+                Node.isNamed(curr) ? Node.getBoundedNamedIndex(curr) : index;
               let newTokens = f(idx, curr, tokens, newScopes);
               (idx, newTokens);
             },
