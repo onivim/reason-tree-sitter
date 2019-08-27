@@ -25,7 +25,7 @@ describe("Parser", ({describe, _}) => {
     });
   });
   describe("json", ({test, _}) =>
-    test("finalizer gets called", ({expect, _}) => {
+    test("simple parsing case", ({expect, _}) => {
       let jsonParser = Parser.json();
       let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
       //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
@@ -41,8 +41,8 @@ describe("Parser", ({describe, _}) => {
 
       let arrayNode = Node.getChild(node, 0);
       expect.string(Node.getType(arrayNode)).toEqual("array");
-      expect.int(Node.getChildCount(arrayNode)).toBe(5);
       expect.int(Node.getNamedChildCount(arrayNode)).toBe(2);
+      expect.int(Node.getChildCount(arrayNode)).toBe(5);
 
       let array0 = Node.getNamedChild(arrayNode, 0);
       let array1 = Node.getNamedChild(arrayNode, 1);
