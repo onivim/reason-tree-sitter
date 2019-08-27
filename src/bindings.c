@@ -437,6 +437,28 @@ CAMLprim value rets_node_parent(value vNode) {
   CAMLreturn(v);
 };
 
+CAMLprim value rets_node_named_index(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  // uint32_t c = ts_node_named_child_count(*node);
+  uint32_t c = 0;
+
+  CAMLreturn(Val_int(c));
+};
+
+CAMLprim value rets_node_index(value vNode) {
+  CAMLparam1(vNode);
+  CAMLlocal1(v);
+
+  TSNode *node = Data_custom_val(vNode);
+  // uint32_t c = ts_node_named_child_count(*node);
+  uint32_t c = 0;
+
+  CAMLreturn(Val_int(c));
+};
+
 CAMLprim value rets_node_named_child_count(value vNode) {
   CAMLparam1(vNode);
   CAMLlocal1(v);
