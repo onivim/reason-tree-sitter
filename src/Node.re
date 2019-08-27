@@ -23,9 +23,6 @@ external _getParent: node => node = "rets_node_parent";
 external _getNamedChildCount: node => int = "rets_node_named_child_count";
 external _getNamedChild: (node, int) => node = "rets_node_named_child";
 
-external _getNextSibling: node => int = "rets_node_next_sibling";
-external _getPrevSibling: node => int = "rets_node_prev_sibling";
-
 external _getDescendantForPointRange: (node, int, int, int, int) => node =
   "rets_node_descendant_for_point_range";
 
@@ -71,16 +68,6 @@ let getNamedChildCount: t => int = wrap0(_getNamedChildCount);
 let getNamedChild = (v: t, idx) => {
   let (tree, node) = v;
   (tree, _getNamedChild(node, idx));
-};
-
-let getNextSibling = v => {
-  let (tree, node) = v;
-  (tree, _getNextSibling(node));
-};
-
-let getPrevSibling = v => {
-  let (tree, node) = v;
-  (tree, _getPrevSibling(node));
 };
 
 let getDescendantForPointRange = (v: t, r0, c0, r1, c1) => {
