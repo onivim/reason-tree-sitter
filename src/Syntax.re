@@ -33,11 +33,10 @@ let getErrorRanges = (node: Node.t) => {
 
   f(node, []);
 };
+type scope = (int, string);
 
 module Token = {
-  type t =
-    | NamedToken(Position.t, list(string), string, string)
-    | UnnamedToken(Position.t, list(string), string);
+  type t = (Position.t, list(scope), string);
 
   let ofNode = (~getTokenName, scopes, node: Node.t) => {
     let isNamed = Node.isNamed(node);
@@ -47,42 +46,48 @@ module Token = {
     let tokenName = getTokenName(range);
 
     switch (isNamed) {
-    | false => UnnamedToken(position, scopes, tokenName)
+    | false => (position, scopes, tokenName)
     | true =>
       let nodeType = Node.getType(node);
-      NamedToken(position, scopes, nodeType, tokenName);
+      let scopes = [(0, nodeType), ...scopes];
+      (position, scopes, tokenName);
     };
   };
 
-  let show = (v: t) => {
-    switch (v) {
-    | NamedToken(p, scopes, s, tok) =>
-      let scopes = String.concat(".", scopes) ++ ".";
+  let getPosition = (v: t) => {
+    let (p, _, _) = v;
+    p;
+  };
 
-      "NamedToken("
-      ++ Position.show(p)
-      ++ ":"
-      ++ scopes
-      ++ s
-      ++ "|"
-      ++ tok
-      ++ ")";
-    | UnnamedToken(p, scopes, tok) =>
-      let scopes = String.concat(".", scopes) ++ ".";
-      "UnnamedToken(" ++ Position.show(p) ++ ":" ++ scopes ++ tok ++ ")";
-    };
+  let _showScope = (scope: scope) => {
+    let (idx, s) = scope;
+    "(" ++ string_of_int(idx) ++ ":" ++ s ++ ")";
+  };
+
+  let show = (v: t) => {
+    let (p, scopes, tok) = v;
+    let stringScopes = List.map(_showScope, scopes);
+    let scopes = String.concat(".", stringScopes);
+    "Token(" ++ Position.show(p) ++ ":" ++ scopes ++ "|" ++ tok ++ ")";
   };
 };
 
 let getParentScopes = (node: Node.t) => {
-  let rec f = (node: Node.t, scopes: list(string)) => {
+  let rec f = (node: Node.t, scopes: list(scope)) => {
     let parent = Node.getParent(node);
 
     if (Node.isNull(parent)) {
       scopes;
     } else {
       Node.isNamed(parent)
-        ? f(parent, [Node.getType(parent), ...scopes]) : f(parent, scopes);
+        ? f(
+            parent,
+            [
+              (Node.getBoundedNamedIndex(parent), Node.getType(parent)),
+              ...scopes,
+            ],
+          )
+        : f(parent, scopes);
     };
   };
 
@@ -92,17 +97,25 @@ let getParentScopes = (node: Node.t) => {
 let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
   if (range.startPosition.line != range.endPosition.line) {
     "";
+  } else if (range.startPosition.line >= Array.length(v)) {
+    "";
   } else {
     let lineNumber = range.startPosition.line;
     let line = v[lineNumber];
 
-    "\""
-    ++ String.sub(
-         line,
-         range.startPosition.column,
-         range.endPosition.column - range.startPosition.column,
-       )
-    ++ "\"";
+    let len = String.length(line);
+
+    if (len == 0 || range.startPosition.column == range.endPosition.column) {
+      "";
+    } else {
+      "\""
+      ++ String.sub(
+           line,
+           range.startPosition.column,
+           range.endPosition.column - range.startPosition.column,
+         )
+      ++ "\"";
+    };
   };
 
 let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
@@ -117,33 +130,45 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
 
   let parentScopes = getParentScopes(node) |> List.rev;
 
-  let rec f = (n: Node.t, tokens: list(Token.t), scopes: list(string)) => {
+  let rec f = (index, n: Node.t, tokens: list(Token.t), scopes: list(scope)) => {
     let startPosition = Node.getStartPoint(n);
     let endPosition = Node.getEndPoint(n);
 
-    if (!Range.isInRange(range, startPosition)
-        && !Range.isInRange(range, endPosition)) {
+    if (endPosition.line < range.startPosition.line
+        || endPosition.line == range.startPosition.line
+        && endPosition.column < range.startPosition.column
+        || startPosition.line > range.endPosition.line
+        || startPosition.line == range.endPosition.line
+        && endPosition.column > range.endPosition.column) {
       tokens;
     } else {
       let childCount = Node.getChildCount(n);
 
       switch (childCount) {
-      | 0 => [Token.ofNode(~getTokenName, List.rev(scopes), n), ...tokens]
+      | 0 => [Token.ofNode(~getTokenName, scopes, n), ...tokens]
       | _ =>
         let children = Node.getChildren(n);
         let newScopes =
           switch (Node.isNamed(n)) {
           | false => scopes
-          | true => [Node.getType(n), ...scopes]
+          | true => [(index, Node.getType(n)), ...scopes]
           };
-        List.fold_left(
-          (prev, curr) => f(curr, prev, newScopes),
-          tokens,
-          children,
-        );
+        let (_, tokens) =
+          List.fold_left(
+            (prev, curr) => {
+              let (index, tokens) = prev;
+              let idx =
+                Node.isNamed(curr) ? Node.getBoundedNamedIndex(curr) : index;
+              let newTokens = f(idx, curr, tokens, newScopes);
+              (idx, newTokens);
+            },
+            (0, tokens),
+            children,
+          );
+        tokens;
       };
     };
   };
 
-  f(nodeToUse, [], parentScopes);
+  f(0, nodeToUse, [], parentScopes) |> List.rev;
 };
