@@ -14,23 +14,23 @@ describe("Node", ({describe, _}) => {
 
   describe("getIndex / getNamedIndex", ({test, _}) => {
     test("getNamedIndex returns correct values", ({expect, _}) => {
-        let firstChild = Node.getNamedChild(simpleNode, 0);
-        let child1 = Node.getNamedChild(firstChild, 0);
-        let child2 = Node.getNamedChild(firstChild, 1);
+      let firstChild = Node.getNamedChild(simpleNode, 0);
+      let child1 = Node.getNamedChild(firstChild, 0);
+      let child2 = Node.getNamedChild(firstChild, 1);
 
-        expect.int(Node.getNamedIndex(child1)).toBe(0);
-        expect.int(Node.getNamedIndex(child2)).toBe(1);
+      expect.int(Node.getNamedIndex(child1)).toBe(0);
+      expect.int(Node.getNamedIndex(child2)).toBe(1);
     });
     test("getIndex returns correct values", ({expect, _}) => {
-        let firstChild = Node.getNamedChild(simpleNode, 0);
-        let child1 = Node.getChild(firstChild, 0);
-        let child2 = Node.getChild(firstChild, 1);
+      let firstChild = Node.getNamedChild(simpleNode, 0);
+      let child1 = Node.getChild(firstChild, 0);
+      let child2 = Node.getChild(firstChild, 1);
 
-        expect.int(Node.getIndex(child1)).toBe(0);
-        expect.int(Node.getIndex(child2)).toBe(1);
-        
-        expect.int(Node.getNamedIndex(child1)).toBe(0);
-        expect.int(Node.getNamedIndex(child2)).toBe(0);
+      expect.int(Node.getIndex(child1)).toBe(0);
+      expect.int(Node.getIndex(child2)).toBe(1);
+
+      expect.int(Node.getNamedIndex(child1)).toBe(0);
+      expect.int(Node.getNamedIndex(child2)).toBe(0);
     });
   });
 

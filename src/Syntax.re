@@ -80,7 +80,13 @@ let getParentScopes = (node: Node.t) => {
       scopes;
     } else {
       Node.isNamed(parent)
-        ? f(parent, [(Node.getNamedIndex(parent), Node.getType(parent)), ...scopes])
+        ? f(
+            parent,
+            [
+              (Node.getNamedIndex(parent), Node.getType(parent)),
+              ...scopes,
+            ],
+          )
         : f(parent, scopes);
     };
   };
@@ -151,7 +157,8 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
           List.fold_left(
             (prev, curr) => {
               let (index, tokens) = prev;
-              let idx = Node.isNamed(curr) ? Node.getNamedIndex(curr) : index;
+              let idx =
+                Node.isNamed(curr) ? Node.getNamedIndex(curr) : index;
               let newTokens = f(idx, curr, tokens, newScopes);
               (idx, newTokens);
             },
