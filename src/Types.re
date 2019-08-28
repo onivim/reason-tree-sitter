@@ -28,17 +28,12 @@ module Range = {
     endPosition,
   };
 
-  let createi = (
-    ~startLine,
-    ~startColumn,
-    ~endLine,
-    ~endColumn,
-    ()
-  ) => {
+  let createi = (~startLine, ~startColumn, ~endLine, ~endColumn, ()) => {
     create(
-    ~startPosition=Position.create(~line=startLine, ~column=startColumn, ()),
-    ~endPosition=Position.create(~line=endLine, ~column=endColumn, ()),
-    ()
+      ~startPosition=
+        Position.create(~line=startLine, ~column=startColumn, ()),
+      ~endPosition=Position.create(~line=endLine, ~column=endColumn, ()),
+      (),
     );
   };
 

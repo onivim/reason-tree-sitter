@@ -88,9 +88,9 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
   let byteOffsets: array(int) = Array.make(len, 0);
 
   // The interop between C <-> OCaml is expensive for large files.
-  // We should look to see if we can instead access the array directly 
+  // We should look to see if we can instead access the array directly
   // from the C side.
-  let f = (_byteOffset, line, col) => {
+  let f = (_byteOffset, line, col) =>
     if (line < len) {
       let v = lines[line] ++ "\n";
       let strlen = String.length(v);
@@ -104,15 +104,14 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
     } else {
       None;
     };
-  };
-  
+
   // TODO: Copy over byte offsets from previous baseline / delta
   let i = ref(0);
   while (i^ < len) {
     let idx = i^;
     byteOffsets[idx] = String.length(lines[idx]) + 1;
     incr(i);
-  }
+  };
 
   let oldTree =
     switch (delta) {

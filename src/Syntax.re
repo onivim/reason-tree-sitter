@@ -55,7 +55,7 @@ module Token = {
   };
 
   let getPosition = (v: t) => {
-    let (p,_, _, _) = v;
+    let (p, _, _, _) = v;
     p;
   };
 
@@ -78,7 +78,15 @@ module Token = {
     let (p, e, scopes, tok) = v;
     let stringScopes = List.map(_showScope, scopes);
     let scopes = String.concat(".", stringScopes);
-    "Token(" ++ Position.show(p) ++ " - " ++ Position.show(e) ++ ":" ++ scopes ++ "|" ++ tok ++ ")";
+    "Token("
+    ++ Position.show(p)
+    ++ " - "
+    ++ Position.show(e)
+    ++ ":"
+    ++ scopes
+    ++ "|"
+    ++ tok
+    ++ ")";
   };
 };
 
@@ -118,21 +126,29 @@ let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
     if (len == 0 || range.startPosition.column == range.endPosition.column) {
       "";
     } else {
-      switch(
-      "\""
-      ++ String.sub(
-           line,
-           range.startPosition.column,
-           range.endPosition.column - range.startPosition.column,
-         )
-      ++ "\"") {
-      | exception exn => 
-      print_endline ("Syntax: ");
-      print_endline (" -line: " ++string_of_int(range.startPosition.line) ++ " col: " ++ string_of_int(range.startPosition.column) ++ " endCol: " ++ string_of_int(range.endPosition.column));
-      print_endline (" -str: " ++ line);
-      raise(exn)
+      switch (
+        "\""
+        ++ String.sub(
+             line,
+             range.startPosition.column,
+             range.endPosition.column - range.startPosition.column,
+           )
+        ++ "\""
+      ) {
+      | exception exn =>
+        print_endline("Syntax: ");
+        print_endline(
+          " -line: "
+          ++ string_of_int(range.startPosition.line)
+          ++ " col: "
+          ++ string_of_int(range.startPosition.column)
+          ++ " endCol: "
+          ++ string_of_int(range.endPosition.column),
+        );
+        print_endline(" -str: " ++ line);
+        raise(exn);
       | v => v
-      }
+      };
     };
   };
 

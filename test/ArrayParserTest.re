@@ -133,7 +133,7 @@ describe("ArrayParser", ({describe, _}) => {
       range.startPosition.line == startPosition.line
       && range.startPosition.column == startPosition.column
       && range.endPosition.line == endPosition.line
-      && range.endPosition.column == endPosition.column
+      && range.endPosition.column == endPosition.column;
     };
     test("token positions are preserved when deleting a line", ({expect, _}) => {
       let start = [|"[", "", "]"|];
@@ -149,33 +149,58 @@ describe("ArrayParser", ({describe, _}) => {
       let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), endv);
 
       let node = Tree.getRootNode(tree);
-      let range = Types.Range.create(
-        ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-        ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-        (),
-      );
-      prerr_endline ("-----START-------");
+      let range =
+        Types.Range.create(
+          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
+          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
+          (),
+        );
+      prerr_endline("-----START-------");
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
       // Validate tokens aren't shifted when deleting a row
       let leftBracket = List.nth(tokens, 0);
-      expect.bool(tokenRangeMatches(
-        ~token=leftBracket,
-        ~range=Types.Range.createi(~startLine=0,~startColumn=0, ~endLine=0, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
+      expect.bool(
+        tokenRangeMatches(
+          ~token=leftBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=0,
+              ~startColumn=0,
+              ~endLine=0,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
 
       expect.string(Syntax.Token.getName(leftBracket)).toEqual("\"[\"");
-      
+
       let rightBracket = List.nth(tokens, 1);
-      expect.bool(tokenRangeMatches(
-        ~token=rightBracket,
-        ~range=Types.Range.createi(~startLine=1,~startColumn=0, ~endLine=1, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
+      expect.bool(
+        tokenRangeMatches(
+          ~token=rightBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=1,
+              ~startColumn=0,
+              ~endLine=1,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
       expect.string(Syntax.Token.getName(rightBracket)).toEqual("\"]\"");
-      List.iter((t) => prerr_endline (Syntax.Token.show(t)), tokens);
+      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
     test("token positions are preserved when adding a line", ({expect, _}) => {
       let start = [|"[", "]"|];
@@ -191,33 +216,59 @@ describe("ArrayParser", ({describe, _}) => {
       let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), endv);
 
       let node = Tree.getRootNode(tree);
-      let getTokenName = (_) => "";
-      let range = Types.Range.create(
-        ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-        ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-        (),
-      );
-      prerr_endline ("-----START-------");
+      let getTokenName = _ => "";
+      let range =
+        Types.Range.create(
+          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
+          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
+          (),
+        );
+      prerr_endline("-----START-------");
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
       // Validate tokens aren't shifted when deleting a row
       let leftBracket = List.nth(tokens, 0);
-      expect.bool(tokenRangeMatches(
-        ~token=leftBracket,
-        ~range=Types.Range.createi(~startLine=0,~startColumn=0, ~endLine=0, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
-      
+      expect.bool(
+        tokenRangeMatches(
+          ~token=leftBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=0,
+              ~startColumn=0,
+              ~endLine=0,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
+
       let rightBracket = List.nth(tokens, 1);
-      expect.bool(tokenRangeMatches(
-        ~token=rightBracket,
-        ~range=Types.Range.createi(~startLine=2,~startColumn=0, ~endLine=2, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
-      List.iter((t) => prerr_endline (Syntax.Token.show(t)), tokens);
+      expect.bool(
+        tokenRangeMatches(
+          ~token=rightBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=2,
+              ~startColumn=0,
+              ~endLine=2,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
+      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
-    test("token positions are preserved when modifying a line", ({expect, _}) => {
-       let start = [|"[", "", "]"|];
+    test(
+      "token positions are preserved when modifying a line", ({expect, _}) => {
+      let start = [|"[", "", "]"|];
 
       let endv = [|"[", "a", "]"|];
 
@@ -230,33 +281,58 @@ describe("ArrayParser", ({describe, _}) => {
       let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), endv);
 
       let node = Tree.getRootNode(tree);
-      let range = Types.Range.create(
-        ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-        ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-        (),
-      );
+      let range =
+        Types.Range.create(
+          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
+          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
+          (),
+        );
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
-      prerr_endline ("-----START-------");
+      prerr_endline("-----START-------");
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
       // Validate tokens aren't shifted when deleting a row
       let leftBracket = List.nth(tokens, 0);
-      expect.bool(tokenRangeMatches(
-        ~token=leftBracket,
-        ~range=Types.Range.createi(~startLine=0,~startColumn=0, ~endLine=0, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
+      expect.bool(
+        tokenRangeMatches(
+          ~token=leftBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=0,
+              ~startColumn=0,
+              ~endLine=0,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
 
       expect.string(Syntax.Token.getName(leftBracket)).toEqual("\"[\"");
-      
+
       let rightBracket = List.nth(tokens, 2);
-      expect.bool(tokenRangeMatches(
-        ~token=rightBracket,
-        ~range=Types.Range.createi(~startLine=2,~startColumn=0, ~endLine=2, ~endColumn=1, ()),
-        ()
-      )).toBe(true);
+      expect.bool(
+        tokenRangeMatches(
+          ~token=rightBracket,
+          ~range=
+            Types.Range.createi(
+              ~startLine=2,
+              ~startColumn=0,
+              ~endLine=2,
+              ~endColumn=1,
+              (),
+            ),
+          (),
+        ),
+      ).
+        toBe(
+        true,
+      );
       expect.string(Syntax.Token.getName(rightBracket)).toEqual("\"]\"");
-      List.iter((t) => prerr_endline (Syntax.Token.show(t)), tokens);
+      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
     test("regression test: multiple delta updates", ({expect, _}) => {
       let jsonParser = Parser.json();
@@ -271,7 +347,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let delta2 = [|""|];
       let end2 = [|"[", "\"a\",", "\"b\",", "", "]"|];
-      
+
       let delta = ArrayParser.Delta.create(baseline, 3, 3, delta2);
       let (_, baseline) = ArrayParser.parse(jsonParser, Some(delta), end2);
 
@@ -282,29 +358,30 @@ describe("ArrayParser", ({describe, _}) => {
       let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), end3);
 
       /*let delta4 = [|"\"c"|];
-      let end4 = [|"[", "\"abc\",", "\"c", "]"|];
-      
-      let delta = ArrayParser.Delta.create(baseline, 2, 3, delta4);
-      let (_, baseline) = ArrayParser.parse(jsonParser, Some(delta), end4);
+        let end4 = [|"[", "\"abc\",", "\"c", "]"|];
 
-      let delta5 = [|"\"\",", "\"d"|];
-      let end5 = [|"[", "\"abc\",", "\"\",", "\"d", "]"|];
+        let delta = ArrayParser.Delta.create(baseline, 2, 3, delta4);
+        let (_, baseline) = ArrayParser.parse(jsonParser, Some(delta), end4);
 
-      let delta = ArrayParser.Delta.create(baseline, 2, 3, delta5);
-      let (_, baseline) = ArrayParser.parse(jsonParser, Some(delta), end5);
-      
-      let delta6 = [|"e"|];
-      let end6 = [|"[", "\"abc\",", "\"\",", "\"d", "e", "]"|];
+        let delta5 = [|"\"\",", "\"d"|];
+        let end5 = [|"[", "\"abc\",", "\"\",", "\"d", "]"|];
 
-      let delta = ArrayParser.Delta.create(baseline, 3, 3, delta6);
-      let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), end6); */
-      
+        let delta = ArrayParser.Delta.create(baseline, 2, 3, delta5);
+        let (_, baseline) = ArrayParser.parse(jsonParser, Some(delta), end5);
+
+        let delta6 = [|"e"|];
+        let end6 = [|"[", "\"abc\",", "\"\",", "\"d", "e", "]"|];
+
+        let delta = ArrayParser.Delta.create(baseline, 3, 3, delta6);
+        let (tree, _) = ArrayParser.parse(jsonParser, Some(delta), end6); */
+
       let node = Tree.getRootNode(tree);
-      let rangeLine2 = Types.Range.create(
-        ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-        ~endPosition=Types.Position.create(~line=6, ~column=0, ()),
-        (),
-      );
+      let rangeLine2 =
+        Types.Range.create(
+          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
+          ~endPosition=Types.Position.create(~line=6, ~column=0, ()),
+          (),
+        );
 
       let getTokenName = Syntax.createArrayTokenNameResolver(end3);
       let tokens = Syntax.getTokens(~getTokenName, ~range=rangeLine2, node);
@@ -321,11 +398,11 @@ describe("ArrayParser", ({describe, _}) => {
       // Token(3,0 - 3,1:(2:string).(0:array).(0:value)|""")
       // Token(3,1 - 3,1:(2:string).(0:array).(0:value)|)
       // Token(4,0 - 4,1:(0:array).(0:value)|"]")
-       
-       //List.iter((t) => prerr_endline (Syntax.Token.show(t)), tokens);
-      
+
+      //List.iter((t) => prerr_endline (Syntax.Token.show(t)), tokens);
+
       // With the byte offest bug, we'd instead crash when resolving tokens
       expect.int(List.length(tokens)).toBe(12);
-  });
+    });
   });
 });
