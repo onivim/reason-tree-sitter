@@ -193,6 +193,17 @@ CAMLprim value rets_tree_edit_native(value vTree, value vStartByte,
   edit.new_end_point.row = Long_val(vNewEndLine);
   edit.new_end_point.column = 0;
 
+  /*printf("SENDING EDIT:\n start_byte: %ld\n old_end_byte: %ld\n new_end_byte: %ld\n, start_row: %ld\n start_col: %ld\n old_end_row: %ld\n old_end_col: %ld\n new_end_row: %ld\n new_end_col: %ld\n",
+    edit.start_byte,
+    edit.old_end_byte,
+    edit.new_end_byte,
+    edit.start_point.row,
+    edit.start_point.column,
+    edit.old_end_point.row,
+    edit.old_end_point.column,
+    edit.new_end_point.row,
+    edit.new_end_point.column);*/
+    
   TSTree *ret = ts_tree_copy(tree);
 
   ts_tree_edit(ret, &edit);

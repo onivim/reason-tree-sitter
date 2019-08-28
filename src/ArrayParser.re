@@ -16,7 +16,13 @@ module Baseline = {
 };
 
 module Delta = {
-  type t = {tree: Tree.t};
+  type t = {
+    tree: Tree.t,
+    startLine: int,
+    oldEndLine: int,
+    oldOffsets: array(int),
+    newLines: array(string),
+  };
 
   let getOffsetToLine = (startLine, endLine, lines: array(int)) => {
     let i = ref(startLine);
@@ -68,7 +74,11 @@ module Delta = {
         newEndLine,
       );
     {
-      tree: newTree
+      tree: newTree,
+      startLine,
+      oldEndLine,
+      newLines,
+      oldOffsets: baseline.lengths,
     };
   };
 };
@@ -77,11 +87,13 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
   let len = Array.length(lines);
   let byteOffsets: array(int) = Array.make(len, 0);
 
-  let f = (_byteOffset, line, col) =>
+  // The interop between C <-> OCaml is expensive for large files.
+  // We should look to see if we can instead access the array directly 
+  // from the C side.
+  let f = (_byteOffset, line, col) => {
     if (line < len) {
       let v = lines[line] ++ "\n";
       let strlen = String.length(v);
-      byteOffsets[line] = strlen;
 
       if (col < strlen) {
         let ret = String.sub(v, col, strlen - col);
@@ -92,10 +104,19 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
     } else {
       None;
     };
+  };
+  
+  // TODO: Copy over byte offsets from previous baseline / delta
+  let i = ref(0);
+  while (i^ < len) {
+    let idx = i^;
+    byteOffsets[idx] = String.length(lines[idx]) + 1;
+    incr(i);
+  }
 
   let oldTree =
     switch (delta) {
-    | Some({tree}) => Some(tree)
+    | Some({tree, _}) => Some(tree)
     | None => None
     };
 
