@@ -67,7 +67,9 @@ module Delta = {
         oldEndLine,
         newEndLine,
       );
-    {tree: newTree};
+    {
+      tree: newTree
+    };
   };
 };
 

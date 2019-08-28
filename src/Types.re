@@ -28,6 +28,20 @@ module Range = {
     endPosition,
   };
 
+  let createi = (
+    ~startLine,
+    ~startColumn,
+    ~endLine,
+    ~endColumn,
+    ()
+  ) => {
+    create(
+    ~startPosition=Position.create(~line=startLine, ~column=startColumn, ()),
+    ~endPosition=Position.create(~line=endLine, ~column=endColumn, ()),
+    ()
+    );
+  };
+
   let isInRange = (range: t, position: Position.t) => {
     (
       position.line == range.startPosition.line
