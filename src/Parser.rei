@@ -16,6 +16,7 @@ let c: unit => t;
  */
 let parseString: (t, string) => Tree.t;
 
+
 type readFunction = (int, int, int) => option(string);
 
 /*
@@ -29,3 +30,5 @@ type readFunction = (int, int, int) => option(string);
    Returns a [Tree.t] with the output of the parsing.
  */
 let parse: (t, option(Tree.t), readFunction) => Tree.t;
+
+let parseArray: (t, option(Tree.t), array(string)) => Tree.t;

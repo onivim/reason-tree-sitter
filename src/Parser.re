@@ -18,6 +18,9 @@ type readFunction = (int, int, int) => option(string);
 external _parse: (t, option(Tree.t), readFunction) => Tree.t =
   "rets_parser_parse";
 
+external _parse_array: (t, option(Tree.t), array(string)) => Tree.t =
+  "rets_parser_parse_array";
+
 let _parse_read_fn: ref(readFunction) = ref((_, _, _) => None);
 
 let _parse_read = (byteOffset: int, line: int, col: int) => {
@@ -27,6 +30,10 @@ let _parse_read = (byteOffset: int, line: int, col: int) => {
 let parse = (parser: t, tree: option(Tree.t), readFunction) => {
   _parse_read_fn := readFunction;
   _parse(parser, tree, _parse_read);
+};
+
+let parseArray = (parser: t, tree: option(Tree.t), lines) => {
+  _parse_array(parser, tree, lines);
 };
 
 Callback.register("rets__parse_read", _parse_read);

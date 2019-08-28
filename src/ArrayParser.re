@@ -8,11 +8,39 @@ type t;
 
 module Baseline = {
   type t = {
-    lengths: array(int),
+    lines: array(string),
     tree: Tree.t,
   };
 
-  let create = (~lengths, ~tree, ()) => {lengths, tree};
+  let create = (~lines, ~tree, ()) => {lines, tree};
+
+  let lineToByte = (v: t, line) => {
+    let node = Tree.getRootNode(v.tree);
+    let startLine = max(line - 1, 0);
+    let nearest = Node.getDescendantForPointRange(
+      node,
+      startLine,
+      0,
+      startLine,
+      1,
+    );
+
+    let startByte = Node.getStartByte(nearest);
+    let startPoint = Node.getStartPoint(nearest);
+
+    let byteAtBeginning = startByte - startPoint.column;
+
+    let i = ref(startPoint.line);
+    let byte = ref(byteAtBeginning);
+    let len = Array.length(v.lines);
+    while(i^ < line && i^ < len) {
+      let idx = i^;
+      let s = v.lines[idx];
+      byte := byte^ + String.length(s) + 1;
+      incr(i);
+    };
+    byte^;
+  };
 };
 
 module Delta = {
@@ -20,20 +48,7 @@ module Delta = {
     tree: Tree.t,
     startLine: int,
     oldEndLine: int,
-    oldOffsets: array(int),
     newLines: array(string),
-  };
-
-  let getOffsetToLine = (startLine, endLine, lines: array(int)) => {
-    let i = ref(startLine);
-    let offset = ref(0);
-
-    while (i^ < endLine) {
-      offset := offset^ + lines[i^];
-      incr(i);
-    };
-
-    offset^;
   };
 
   let getOffsetToLineStr = (startLine, endLine, lines: array(string)) => {
@@ -47,7 +62,7 @@ module Delta = {
 
     offset^;
   };
-
+  
   let create =
       (
         baseline: Baseline.t,
@@ -55,9 +70,9 @@ module Delta = {
         oldEndLine: int,
         newLines: array(string),
       ) => {
-    let {lengths, tree}: Baseline.t = baseline;
-    let startByte = getOffsetToLine(0, startLine, lengths);
-    let oldEndByte = getOffsetToLine(0, oldEndLine, lengths);
+    let {tree, _}: Baseline.t = baseline;
+    let startByte = Baseline.lineToByte(baseline, startLine);
+    let oldEndByte = Baseline.lineToByte(baseline, oldEndLine);
 
     let len = Array.length(newLines);
     let newEndByte = startByte + getOffsetToLineStr(0, len, newLines);
@@ -78,19 +93,17 @@ module Delta = {
       startLine,
       oldEndLine,
       newLines,
-      oldOffsets: baseline.lengths,
     };
   };
 };
 
 let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => {
-  let len = Array.length(lines);
-  let byteOffsets: array(int) = Array.make(len, 0);
+  //let len = Array.length(lines);
 
   // The interop between C <-> OCaml is expensive for large files.
   // We should look to see if we can instead access the array directly
   // from the C side.
-  let f = (_byteOffset, line, col) =>
+/*  let f = (_byteOffset, line, col) =>
     if (line < len) {
       let v = lines[line] ++ "\n";
       let strlen = String.length(v);
@@ -103,15 +116,7 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
       };
     } else {
       None;
-    };
-
-  // TODO: Copy over byte offsets from previous baseline / delta
-  let i = ref(0);
-  while (i^ < len) {
-    let idx = i^;
-    byteOffsets[idx] = String.length(lines[idx]) + 1;
-    incr(i);
-  };
+    };*/
 
   let oldTree =
     switch (delta) {
@@ -119,7 +124,7 @@ let parse = (parser: Parser.t, delta: option(Delta.t), lines: array(string)) => 
     | None => None
     };
 
-  let tree = Parser.parse(parser, oldTree, f);
-  let baseline = Baseline.create(~tree, ~lengths=byteOffsets, ());
+  let tree = Parser.parseArray(parser, oldTree, lines);
+  let baseline = Baseline.create(~tree, ~lines, ());
   (tree, baseline);
 };

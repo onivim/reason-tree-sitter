@@ -137,6 +137,60 @@ CAMLprim value rets_parser_parse(value vParser, value vTree, value vRead) {
   CAMLreturn(ret);
 };
 
+const char *rets_read_array(void *payload, uint32_t byte_offset, TSPoint position,
+                      uint32_t *bytes_read) {
+  value vArray = (value)payload;
+  int len = Wosize_val(vArray);
+
+  char *ret = NULL;
+  *bytes_read = 0;
+
+  if (position.row < len) {
+    char *v = String_val(Field(vArray, position.row));
+    int szLen = strlen(v) + 1;
+    if (position.column < szLen) {
+    char *cpy = malloc((sizeof(char) * szLen) + 1);
+    memcpy(cpy, v, szLen);
+    cpy[szLen - 1] = '\n';
+    cpy[szLen] = 0;
+    
+    ret = cpy + position.column;
+    *bytes_read = szLen - position.column;
+    }
+  }
+  
+  return ret;
+}
+
+CAMLprim value rets_parser_parse_array(value vParser, value vTree, value vArray) {
+  CAMLparam3(vParser, vTree, vArray);
+  CAMLlocal1(ret);
+
+  parser_W *p = Data_custom_val(vParser);
+  TSParser *tsparser = p->parser;
+
+  TSTree *oldTree = NULL;
+  // Some(tree)
+  if (Is_block(vTree)) {
+    tree_W *t = Data_custom_val(Field(vTree, 0));
+    oldTree = t->tree;
+  }
+
+  TSInput input;
+  input.payload = (void *)vArray;
+  input.read = &rets_read_array;
+  input.encoding = TSInputEncodingUTF8;
+
+  TSTree *tree = ts_parser_parse(tsparser, oldTree, input);
+
+  tree_W treeWrapper;
+  treeWrapper.tree = tree;
+  ret = caml_alloc_custom(&tree_custom_ops, sizeof(tree_W), 0, 1);
+  memcpy(Data_custom_val(ret), &treeWrapper, sizeof(tree_W));
+
+  CAMLreturn(ret);
+};
+
 CAMLprim value rets_parser_parse_string(value vParser, value vSource) {
   CAMLparam2(vParser, vSource);
   CAMLlocal1(v);
