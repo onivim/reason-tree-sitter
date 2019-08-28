@@ -126,13 +126,13 @@ let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
     if (len == 0 || range.startPosition.column == range.endPosition.column) {
       "";
     } else {
-        "\""
-        ++ String.sub(
-             line,
-             range.startPosition.column,
-             range.endPosition.column - range.startPosition.column,
-           )
-        ++ "\""
+      "\""
+      ++ String.sub(
+           line,
+           range.startPosition.column,
+           range.endPosition.column - range.startPosition.column,
+         )
+      ++ "\"";
     };
   };
 
