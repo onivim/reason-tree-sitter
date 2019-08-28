@@ -36,7 +36,7 @@ let getErrorRanges = (node: Node.t) => {
 type scope = (int, string);
 
 module Token = {
-  type t = (Position.t, list(scope), string);
+  type t = (Position.t, Position.t, list(scope), string);
 
   let ofNode = (~getTokenName, scopes, node: Node.t) => {
     let isNamed = Node.isNamed(node);
@@ -46,17 +46,27 @@ module Token = {
     let tokenName = getTokenName(range);
 
     switch (isNamed) {
-    | false => (position, scopes, tokenName)
+    | false => (position, endPosition, scopes, tokenName)
     | true =>
       let nodeType = Node.getType(node);
       let scopes = [(0, nodeType), ...scopes];
-      (position, scopes, tokenName);
+      (position, endPosition, scopes, tokenName);
     };
   };
 
   let getPosition = (v: t) => {
-    let (p, _, _) = v;
+    let (p, _, _, _) = v;
     p;
+  };
+
+  let getEndPosition = (v: t) => {
+    let (_, e, _, _) = v;
+    e;
+  };
+
+  let getName = (v: t) => {
+    let (_, _, _, n) = v;
+    n;
   };
 
   let _showScope = (scope: scope) => {
@@ -65,10 +75,18 @@ module Token = {
   };
 
   let show = (v: t) => {
-    let (p, scopes, tok) = v;
+    let (p, e, scopes, tok) = v;
     let stringScopes = List.map(_showScope, scopes);
     let scopes = String.concat(".", stringScopes);
-    "Token(" ++ Position.show(p) ++ ":" ++ scopes ++ "|" ++ tok ++ ")";
+    "Token("
+    ++ Position.show(p)
+    ++ " - "
+    ++ Position.show(e)
+    ++ ":"
+    ++ scopes
+    ++ "|"
+    ++ tok
+    ++ ")";
   };
 };
 
