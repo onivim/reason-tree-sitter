@@ -126,7 +126,6 @@ let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
     if (len == 0 || range.startPosition.column == range.endPosition.column) {
       "";
     } else {
-      switch (
         "\""
         ++ String.sub(
              line,
@@ -134,21 +133,6 @@ let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
              range.endPosition.column - range.startPosition.column,
            )
         ++ "\""
-      ) {
-      | exception exn =>
-        print_endline("Syntax: ");
-        print_endline(
-          " -line: "
-          ++ string_of_int(range.startPosition.line)
-          ++ " col: "
-          ++ string_of_int(range.startPosition.column)
-          ++ " endCol: "
-          ++ string_of_int(range.endPosition.column),
-        );
-        print_endline(" -str: " ++ line);
-        raise(exn);
-      | v => v
-      };
     };
   };
 
