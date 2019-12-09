@@ -4,7 +4,7 @@
     Helpers to connect TSNode with a syntax highlighting solution
  */
 
-open Types;
+open EditorCoreTypes;
 
 let getErrorRanges = (node: Node.t) => {
   let rec f = (node: Node.t, errors: list(Range.t)) => {
@@ -33,61 +33,44 @@ let getErrorRanges = (node: Node.t) => {
 
   f(node, []);
 };
+
 type scope = (int, string);
 
 module Token = {
-  type t = (Position.t, Position.t, list(scope), string);
+  type t = (Location.t, Location.t, list(scope), string);
 
   let ofNode = (~getTokenName, scopes, node: Node.t) => {
     let isNamed = Node.isNamed(node);
-    let position = Node.getStartPoint(node);
-    let endPosition = Node.getEndPoint(node);
-    let range = Range.create(~startPosition=position, ~endPosition, ());
+    let start = Node.getStartPoint(node);
+    let stop = Node.getEndPoint(node);
+    let range = Range.create(~start, ~stop);
     let tokenName = getTokenName(range);
 
     switch (isNamed) {
-    | false => (position, endPosition, scopes, tokenName)
+    | false => (start, stop, scopes, tokenName)
     | true =>
       let nodeType = Node.getType(node);
       let scopes = [(0, nodeType), ...scopes];
-      (position, endPosition, scopes, tokenName);
+      (start, stop, scopes, tokenName);
     };
   };
 
-  let getPosition = (v: t) => {
-    let (p, _, _, _) = v;
-    p;
-  };
+  let getPosition = ((pos, _, _, _): t) => pos;
 
-  let getEndPosition = (v: t) => {
-    let (_, e, _, _) = v;
-    e;
-  };
+  let getEndPosition = ((_, endPos, _, _): t) => endPos;
 
-  let getName = (v: t) => {
-    let (_, _, _, n) = v;
-    n;
-  };
+  let getName = ((_, _, _, name): t) => name;
 
-  let _showScope = (scope: scope) => {
-    let (idx, s) = scope;
-    "(" ++ string_of_int(idx) ++ ":" ++ s ++ ")";
-  };
+  let _showScope = ((idx, s)) => Printf.sprintf("(%n:%s)", idx, s);
 
-  let show = (v: t) => {
-    let (p, e, scopes, tok) = v;
-    let stringScopes = List.map(_showScope, scopes);
-    let scopes = String.concat(".", stringScopes);
-    "Token("
-    ++ Position.show(p)
-    ++ " - "
-    ++ Position.show(e)
-    ++ ":"
-    ++ scopes
-    ++ "|"
-    ++ tok
-    ++ ")";
-  };
+  let show = ((p, e, scopes, tok): t) =>
+    Printf.sprintf(
+      "Token(%s - %s:%s|%s)",
+      Location.toString(p),
+      Location.toString(e),
+      scopes |> List.map(_showScope) |> String.concat("."),
+      tok,
+    );
 };
 
 let getParentScopes = (node: Node.t) => {
@@ -113,26 +96,28 @@ let getParentScopes = (node: Node.t) => {
 };
 
 let createArrayTokenNameResolver = (v: array(string), range: Range.t) =>
-  if (range.startPosition.line != range.endPosition.line) {
+  if (range.start.line != range.stop.line) {
     "";
-  } else if (range.startPosition.line >= Array.length(v)) {
+  } else if (range.start.line >= Index.fromZeroBased(Array.length(v))) {
     "";
   } else {
-    let lineNumber = range.startPosition.line;
+    let lineNumber = Index.toZeroBased(range.start.line);
     let line = v[lineNumber];
 
     let len = String.length(line);
 
-    if (len == 0 || range.startPosition.column == range.endPosition.column) {
+    if (len == 0 || range.start.column == range.stop.column) {
       "";
     } else {
-      "\""
-      ++ String.sub(
-           line,
-           range.startPosition.column,
-           range.endPosition.column - range.startPosition.column,
-         )
-      ++ "\"";
+      Printf.sprintf(
+        {|"%s"|},
+        String.sub(
+          line,
+          Index.toZeroBased(range.start.column),
+          Index.toZeroBased(range.stop.column)
+          - Index.toZeroBased(range.start.column),
+        ),
+      );
     };
   };
 
@@ -140,24 +125,24 @@ let getTokens = (~getTokenName, ~range: Range.t, node: Node.t) => {
   let nodeToUse =
     Node.getDescendantForPointRange(
       node,
-      range.startPosition.line,
-      range.startPosition.column,
-      range.endPosition.line,
-      range.endPosition.column,
+      Index.toZeroBased(range.start.line),
+      Index.toZeroBased(range.start.column),
+      Index.toZeroBased(range.stop.line),
+      Index.toZeroBased(range.stop.column),
     );
 
   let parentScopes = getParentScopes(node) |> List.rev;
 
   let rec f = (index, n: Node.t, tokens: list(Token.t), scopes: list(scope)) => {
-    let startPosition = Node.getStartPoint(n);
-    let endPosition = Node.getEndPoint(n);
+    let start = Node.getStartPoint(n);
+    let stop = Node.getEndPoint(n);
 
-    if (endPosition.line < range.startPosition.line
-        || endPosition.line == range.startPosition.line
-        && endPosition.column < range.startPosition.column
-        || startPosition.line > range.endPosition.line
-        || startPosition.line == range.endPosition.line
-        && endPosition.column > range.endPosition.column) {
+    if (stop.line < range.start.line
+        || stop.line == range.start.line
+        && stop.column < range.start.column
+        || start.line > range.stop.line
+        || start.line == range.stop.line
+        && stop.column > range.stop.column) {
       tokens;
     } else {
       let childCount = Node.getChildCount(n);

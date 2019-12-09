@@ -4,7 +4,7 @@
      Stubs for bindings to the `TSTree` object
  */
 
-open Types;
+open EditorCoreTypes;
 open NativeTypes;
 
 type t = (Tree.t, node);
@@ -33,8 +33,8 @@ external _getDescendantForPointRange: (node, int, int, int, int) => node =
 external _getStartByte: node => int = "rets_node_start_byte";
 external _getEndByte: node => int = "rets_node_end_byte";
 
-external _getStartPoint: node => Position.t = "rets_node_start_point";
-external _getEndPoint: node => Position.t = "rets_node_end_point";
+external _getStartPoint: node => Location.t = "rets_node_start_point";
+external _getEndPoint: node => Location.t = "rets_node_end_point";
 
 external _hasChanges: node => bool = "rets_node_has_changes";
 external _hasError: node => bool = "rets_node_has_error";
@@ -98,8 +98,8 @@ let getStartByte: t => int = wrap0(_getStartByte);
 
 let getEndByte: t => int = wrap0(_getEndByte);
 
-let getStartPoint: t => Position.t = wrap0(_getStartPoint);
-let getEndPoint: t => Position.t = wrap0(_getEndPoint);
+let getStartPoint: t => Location.t = wrap0(_getStartPoint);
+let getEndPoint: t => Location.t = wrap0(_getEndPoint);
 
 let hasChanges: t => bool = wrap0(_hasChanges);
 let hasError: t => bool = wrap0(_hasError);
@@ -129,8 +129,8 @@ let getChildren = (node: t) => {
 };
 
 let getRange = (node: t) => {
-  let startPosition = getStartPoint(node);
-  let endPosition = getEndPoint(node);
+  let start = getStartPoint(node);
+  let stop = getEndPoint(node);
 
-  Range.create(~startPosition, ~endPosition, ());
+  Range.create(~start, ~stop);
 };

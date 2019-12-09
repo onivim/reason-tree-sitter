@@ -1,7 +1,6 @@
+open EditorCoreTypes;
 open Treesitter;
 open BenchFramework;
-
-open TreeSitter.Types;
 
 Printexc.record_backtrace(true);
 
@@ -14,16 +13,18 @@ let largeResolver =
 
 let fullRange =
   Range.create(
-    ~startPosition=Position.create(~line=0, ~column=0, ()),
-    ~endPosition=Position.create(~line=7, ~column=0, ()),
-    (),
+    ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+    ~stop=Location.create(~line=Index.(zero + 7), ~column=Index.zero),
   );
 
 let subRange =
   Range.create(
-    ~startPosition=Position.create(~line=3, ~column=0, ()),
-    ~endPosition=Position.create(~line=3, ~column=50, ()),
-    (),
+    ~start=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
+    ~stop=
+      Location.create(
+        ~line=Index.(zero + 3),
+        ~column=Index.fromZeroBased(50),
+      ),
   );
 
 let getTokens = (range, resolver, node: Node.t, ()) => {
