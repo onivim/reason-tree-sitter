@@ -1,6 +1,6 @@
-open TestFramework;
-
+open EditorCoreTypes;
 open Treesitter;
+open TestFramework;
 
 describe("ArrayParser", ({describe, _}) => {
   describe("parse", ({test, _}) => {
@@ -126,14 +126,14 @@ describe("ArrayParser", ({describe, _}) => {
       );
     });
 
-    let tokenRangeMatches = (~token, ~range: Types.Range.t, ()) => {
+    let tokenRangeMatches = (~token, ~range: Range.t, ()) => {
       let startPosition = Syntax.Token.getPosition(token);
       let endPosition = Syntax.Token.getEndPosition(token);
 
-      range.startPosition.line == startPosition.line
-      && range.startPosition.column == startPosition.column
-      && range.endPosition.line == endPosition.line
-      && range.endPosition.column == endPosition.column;
+      range.start.line == startPosition.line
+      && range.start.column == startPosition.column
+      && range.stop.line == endPosition.line
+      && range.stop.column == endPosition.column;
     };
     test("token positions are preserved when deleting a line", ({expect, _}) => {
       let start = [|"[", "", "]"|];
@@ -150,10 +150,9 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let range =
-        Types.Range.create(
-          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-          (),
+        Range.create(
+          ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+          ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
       prerr_endline("-----START-------");
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
@@ -165,12 +164,10 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=leftBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=0,
-              ~startColumn=0,
-              ~endLine=0,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+              ~stop=
+                Location.create(~line=Index.zero, ~column=Index.(zero + 1)),
             ),
           (),
         ),
@@ -186,12 +183,14 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=rightBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=1,
-              ~startColumn=0,
-              ~endLine=1,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=
+                Location.create(~line=Index.(zero + 1), ~column=Index.zero),
+              ~stop=
+                Location.create(
+                  ~line=Index.(zero + 1),
+                  ~column=Index.(zero + 1),
+                ),
             ),
           (),
         ),
@@ -218,10 +217,9 @@ describe("ArrayParser", ({describe, _}) => {
       let node = Tree.getRootNode(tree);
       let getTokenName = _ => "";
       let range =
-        Types.Range.create(
-          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-          (),
+        Range.create(
+          ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+          ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
       prerr_endline("-----START-------");
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
@@ -232,12 +230,10 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=leftBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=0,
-              ~startColumn=0,
-              ~endLine=0,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+              ~stop=
+                Location.create(~line=Index.zero, ~column=Index.(zero + 1)),
             ),
           (),
         ),
@@ -251,12 +247,14 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=rightBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=2,
-              ~startColumn=0,
-              ~endLine=2,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=
+                Location.create(~line=Index.(zero + 2), ~column=Index.zero),
+              ~stop=
+                Location.create(
+                  ~line=Index.(zero + 2),
+                  ~column=Index.(zero + 1),
+                ),
             ),
           (),
         ),
@@ -282,10 +280,9 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let range =
-        Types.Range.create(
-          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-          ~endPosition=Types.Position.create(~line=3, ~column=0, ()),
-          (),
+        Range.create(
+          ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+          ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
       prerr_endline("-----START-------");
@@ -297,12 +294,10 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=leftBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=0,
-              ~startColumn=0,
-              ~endLine=0,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+              ~stop=
+                Location.create(~line=Index.zero, ~column=Index.(zero + 1)),
             ),
           (),
         ),
@@ -318,12 +313,14 @@ describe("ArrayParser", ({describe, _}) => {
         tokenRangeMatches(
           ~token=rightBracket,
           ~range=
-            Types.Range.createi(
-              ~startLine=2,
-              ~startColumn=0,
-              ~endLine=2,
-              ~endColumn=1,
-              (),
+            Range.create(
+              ~start=
+                Location.create(~line=Index.(zero + 2), ~column=Index.zero),
+              ~stop=
+                Location.create(
+                  ~line=Index.(zero + 2),
+                  ~column=Index.(zero + 1),
+                ),
             ),
           (),
         ),
@@ -377,10 +374,9 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let rangeLine2 =
-        Types.Range.create(
-          ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-          ~endPosition=Types.Position.create(~line=6, ~column=0, ()),
-          (),
+        Range.create(
+          ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+          ~stop=Location.create(~line=Index.(zero + 6), ~column=Index.zero),
         );
 
       let getTokenName = Syntax.createArrayTokenNameResolver(end3);

@@ -1,6 +1,6 @@
-open TestFramework;
-
+open EditorCoreTypes;
 open Treesitter;
+open TestFramework;
 
 describe("Syntax", ({describe, _}) => {
   let jsonParser = Parser.json();
@@ -20,10 +20,9 @@ describe("Syntax", ({describe, _}) => {
   let objectNode = Tree.getRootNode(tree);
   let objectNameResolver = Syntax.createArrayTokenNameResolver(objectArray);
   let range =
-    Types.Range.create(
-      ~startPosition=Types.Position.create(~line=0, ~column=0, ()),
-      ~endPosition=Types.Position.create(~line=1, ~column=0, ()),
-      (),
+    Range.create(
+      ~start=Location.create(~line=Index.zero, ~column=Index.zero),
+      ~stop=Location.create(~line=Index.(zero + 1), ~column=Index.zero),
     );
 
   describe("getErrorRanges", ({test, _}) => {
@@ -37,19 +36,14 @@ describe("Syntax", ({describe, _}) => {
 
       let errorRange = List.hd(errors);
 
-      let startLine = errorRange.startPosition.line;
-      let endLine = errorRange.endPosition.line;
+      expect.int((errorRange.start.line :> int)).toBe(0);
+      expect.int((errorRange.stop.line :> int)).toBe(0);
 
-      let startColumn = errorRange.startPosition.column;
-      let endColumn = errorRange.endPosition.column;
-
-      expect.int(startLine).toBe(0);
-      expect.int(endLine).toBe(0);
-
-      expect.int(startColumn).toBe(2);
-      expect.int(endColumn).toBe(3);
+      expect.int((errorRange.start.column :> int)).toBe(2);
+      expect.int((errorRange.stop.column :> int)).toBe(3);
     });
   });
+
   describe("getTokens", ({test, _}) => {
     test("returns list of tokens for object in  success case", ({expect, _}) => {
       prerr_endline("--OBJECT--");
@@ -84,6 +78,7 @@ describe("Syntax", ({describe, _}) => {
       expect.int(List.length(tokens)).toBe(4);
     });
   });
+
   describe("getParentScopes", ({test, _}) => {
     test("returns empty list for root", ({expect, _}) => {
       let scopes = Syntax.getParentScopes(simpleNode);

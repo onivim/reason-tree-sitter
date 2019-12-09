@@ -42,11 +42,11 @@ describe("Node", ({describe, _}) => {
       let startPoint = Node.getStartPoint(line2Node);
       let endPoint = Node.getEndPoint(line2Node);
 
-      expect.int(startPoint.line).toBe(1);
-      expect.int(startPoint.column).toBe(0);
+      expect.int((startPoint.line :> int)).toBe(1);
+      expect.int((startPoint.column :> int)).toBe(0);
 
-      expect.int(endPoint.line).toBe(1);
-      expect.int(endPoint.column).toBe(3);
+      expect.int((endPoint.line :> int)).toBe(1);
+      expect.int((endPoint.column :> int)).toBe(3);
 
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual("(string (string_content))");
@@ -56,11 +56,11 @@ describe("Node", ({describe, _}) => {
         let startPoint = Node.getStartPoint(simpleNode);
         let endPoint = Node.getEndPoint(simpleNode);
 
-        expect.int(startPoint.line).toBe(0);
-        expect.int(startPoint.column).toBe(0);
+        expect.int((startPoint.line :> int)).toBe(0);
+        expect.int((startPoint.column :> int)).toBe(0);
 
-        expect.int(endPoint.line).toBe(3);
-        expect.int(endPoint.column).toBe(0);
+        expect.int((endPoint.line :> int)).toBe(3);
+        expect.int((endPoint.column :> int)).toBe(0);
       })
     );
 
