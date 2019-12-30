@@ -107,6 +107,62 @@ CAMLprim value rets_parser_new_c(value unit) {
   CAMLreturn(v);
 };
 
+CAMLprim value rets_parser_new_python(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_python());
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_parser_new_js(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_js());
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_parser_new_ts(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_ts());
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_parser_new_tsx(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_tsx());
+  CAMLreturn(v);
+};
+
 const char *rets_read(void *payload, uint32_t byte_offset, TSPoint position,
                       uint32_t *bytes_read) {
   value *closure = caml_named_value("rets__parse_read");

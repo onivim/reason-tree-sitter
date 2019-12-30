@@ -7,8 +7,23 @@ type t;
 /* [json()] returns a new JSON parser */
 let json: unit => t;
 
-/* [c()] returns a new C/C++ parser */
+/* [c()] returns a new C parser */
 let c: unit => t;
+
+/* [cpp()] returns a new C++ parser */
+let cpp: unit => t;
+
+/* [python()] returns a new Python parser */
+let python: unit => t;
+
+/* [js()] returns a new Javascript parser */
+let js: unit => t;
+
+/* [ts()] returns a new TS parser */
+let ts: unit => t;
+
+/* [tsx()] returns a new TSX parser */
+let tsx: unit => t;
 
 /*
    [parseString(parser, contents)] parses a string with [parser],
