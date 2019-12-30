@@ -12,6 +12,11 @@
 // External syntaxes
 TSLanguage *tree_sitter_json();
 TSLanguage *tree_sitter_c();
+TSLanguage *tree_sitter_cpp();
+TSLanguage *tree_sitter_python();
+TSLanguage *tree_sitter_js();
+TSLanguage *tree_sitter_ts();
+TSLanguage *tree_sitter_tsx();
 
 typedef struct _parser {
   TSParser *parser;
@@ -34,30 +39,30 @@ void finalize_tree(value v) {
 }
 
 static struct custom_operations parser_custom_ops = {
-  identifier : "parser handling",
-  finalize : finalize_parser,
-  compare : custom_compare_default,
-  hash : custom_hash_default,
-  serialize : custom_serialize_default,
-  deserialize : custom_deserialize_default
+  .identifier = "parser handling",
+  .finalize = finalize_parser,
+  .compare = custom_compare_default,
+  .hash = custom_hash_default,
+  .serialize = custom_serialize_default,
+  .deserialize = custom_deserialize_default
 };
 
 static struct custom_operations tree_custom_ops = {
-  identifier : "tree handling",
-  finalize : finalize_tree,
-  compare : custom_compare_default,
-  hash : custom_hash_default,
-  serialize : custom_serialize_default,
-  deserialize : custom_deserialize_default
+  .identifier = "tree handling",
+  .finalize = finalize_tree,
+  .compare = custom_compare_default,
+  .hash = custom_hash_default,
+  .serialize = custom_serialize_default,
+  .deserialize = custom_deserialize_default
 };
 
 static struct custom_operations TSNode_custom_ops = {
-  identifier : "TSNode handling",
-  finalize : custom_finalize_default,
-  compare : custom_compare_default,
-  hash : custom_hash_default,
-  serialize : custom_serialize_default,
-  deserialize : custom_deserialize_default
+  .identifier = "TSNode handling",
+  .finalize = custom_finalize_default,
+  .compare = custom_compare_default,
+  .hash = custom_hash_default,
+  .serialize = custom_serialize_default,
+  .deserialize = custom_deserialize_default
 };
 
 CAMLprim value rets_parser_new_json(value unit) {
@@ -71,6 +76,20 @@ CAMLprim value rets_parser_new_json(value unit) {
   v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
   memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
   ts_parser_set_language(parser, tree_sitter_json());
+  CAMLreturn(v);
+};
+
+CAMLprim value rets_parser_new_cpp(value unit) {
+  CAMLparam0();
+  CAMLlocal1(v);
+
+  parser_W parserWrapper;
+  TSParser *parser = ts_parser_new();
+  parserWrapper.parser = parser;
+
+  v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
+  memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
+  ts_parser_set_language(parser, tree_sitter_cpp());
   CAMLreturn(v);
 };
 

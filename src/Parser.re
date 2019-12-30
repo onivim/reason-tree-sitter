@@ -9,6 +9,11 @@ type t;
 // Parsers for particular syntaxes
 external json: unit => t = "rets_parser_new_json";
 external c: unit => t = "rets_parser_new_c";
+external cpp: unit => t = "rets_parser_new_cpp";
+external python: unit => t = "rets_parser_new_python";
+external js: unit => t = "rets_parser_new_js";
+external ts: unit => t = "rets_parser_new_ts";
+external tsx: unit => t = "rets_parser_new_tsx";
 
 // General parser methods
 external parseString: (t, string) => Tree.t = "rets_parser_parse_string";
