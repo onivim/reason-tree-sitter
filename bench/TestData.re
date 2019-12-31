@@ -15,7 +15,7 @@ let read_file = filename => {
   ) {
   | End_of_file =>
     close_in(chan);
-    print_endline("EOF");
+    print_endline("Finished reading " ++ filename);
     List.rev(lines^);
   };
 };
@@ -36,4 +36,8 @@ let largeJSArray = largeJS |> Array.of_list;
 let largeTS = read_file(dir ++ "/" ++ "vscode.d.ts");
 let largeTSString = largeTS |> String.concat("\n");
 let largeTSArray = largeTS |> Array.of_list;
+
+let largePy = read_file(dir ++ "/" ++ "black.py");
+let largePyString = largePy |> String.concat("\n");
+let largePyArray = largePy |> Array.of_list;
 print_endline("Finished loading.");
