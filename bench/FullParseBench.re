@@ -23,75 +23,38 @@ let parseArray = (v: array(string), parser: Parser.t, ()) => {
 
 let setup = () => ();
 let options = Reperf.Options.create(~iterations=10, ());
+let doBench = (name, f) => bench(~name, ~options, ~setup, ~f, ());
 
-bench(
-  ~name="parseString: Small JSON",
-  ~options,
-  ~setup,
-  ~f=parse(simpleJson, jsonParser),
-  (),
+doBench("parseString: Small JSON", parse(simpleJson, jsonParser));
+doBench("parseString: Small C", parse(simpleC, cParser));
+doBench("parseString: Small JS", parse(simpleJs, jsParser));
+
+doBench(
+  "parseString: Large JSON (canada.json)",
+  parse(TestData.largeJsonString, jsonParser),
 );
 
-bench(
-  ~name="parseString: Small C",
-  ~options,
-  ~setup,
-  ~f=parse(simpleC, cParser),
-  (),
+doBench(
+  "parseString: Large C (sqlite3.c)",
+  parse(TestData.largeCString, cParser),
 );
 
-bench(
-  ~name="parseString: Small JS",
-  ~options,
-  ~setup,
-  ~f=parse(simpleJs, jsParser),
-  (),
+doBench(
+  "parseString: Large JS (react-dom.development.js)",
+  parse(TestData.largeJSString, jsParser),
 );
 
-bench(
-  ~name="parseString: Large JSON (canada.json)",
-  ~options,
-  ~setup,
-  ~f=parse(TestData.largeJsonString, jsonParser),
-  (),
+doBench(
+  "parseArray: Large JSON (canada.json)",
+  parseArray(TestData.largeJsonArray, jsonParser),
 );
 
-bench(
-  ~name="parseString: Large C (sqlite3.c)",
-  ~options,
-  ~setup,
-  ~f=parse(TestData.largeCString, cParser),
-  (),
+doBench(
+  "parseArray: Large C (sqlite3.c)",
+  parseArray(TestData.largeCArray, cParser),
 );
 
-bench(
-  ~name="parseString: Large JS (react-dom.development.js)",
-  ~options,
-  ~setup,
-  ~f=parse(TestData.largeJSString, jsParser),
-  (),
-);
-
-bench(
-  ~name="parseArray: Large JSON (canada.json)",
-  ~options,
-  ~setup,
-  ~f=parseArray(TestData.largeJsonArray, jsonParser),
-  (),
-);
-
-bench(
-  ~name="parseArray: Large C (sqlite3.c)",
-  ~options,
-  ~setup,
-  ~f=parseArray(TestData.largeCArray, cParser),
-  (),
-);
-
-bench(
-  ~name="parseArray: Large JS (react-dom.development.js)",
-  ~options,
-  ~setup,
-  ~f=parseArray(TestData.largeJSArray, jsParser),
-  (),
+doBench(
+  "parseArray: Large JS (react-dom.development.js)",
+  parseArray(TestData.largeJSArray, jsParser),
 );
