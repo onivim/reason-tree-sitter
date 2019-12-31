@@ -43,7 +43,10 @@ let flags_with_sanitize =
     | _ -> flags
 ;;
 
-let cxx_flags = c_flags
+let cxx_flags =
+    match get_os with
+    | Linux | Mac | Windows -> c_flags @ ["-lstdc++"]
+    | _ -> c_flags
 ;;
 
 Configurator.V1.Flags.write_sexp "c_flags.sexp" c_flags;
