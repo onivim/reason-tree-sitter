@@ -16,11 +16,11 @@ let cpp: unit => t;
 /* [python()] returns a new Python parser */
 let python: unit => t;
 
-/* [js()] returns a new Javascript parser */
-let js: unit => t;
+/* [javascript()] returns a new Javascript parser */
+let javascript: unit => t;
 
-/* [ts()] returns a new TS parser */
-let ts: unit => t;
+/* [typescript()] returns a new TS parser */
+let typescript: unit => t;
 
 /* [tsx()] returns a new TSX parser */
 let tsx: unit => t;

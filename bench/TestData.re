@@ -28,4 +28,8 @@ let largeJsonArray = largeJson |> Array.of_list;
 let largeC = read_file(dir ++ "/" ++ "sqlite3.c");
 let largeCString = largeC |> String.concat("\n");
 let largeCArray = largeC |> Array.of_list;
+
+let largeJS = read_file(dir ++ "/" ++ "react-dom.development.js");
+let largeJSString = largeJS |> String.concat("\n");
+let largeJSArray = largeJS |> Array.of_list;
 print_endline("Finished loading.");
