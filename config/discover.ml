@@ -33,6 +33,7 @@ let libPath = "-L" ^ treeSitterLibPath
 
 let flags = []
         @ ccopt(libPath)
+        @ ccopt("-lstdc++")
         @ cclib("-ltree-sitter")
 ;;
 

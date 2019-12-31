@@ -14,8 +14,8 @@ TSLanguage *tree_sitter_json();
 TSLanguage *tree_sitter_c();
 TSLanguage *tree_sitter_cpp();
 TSLanguage *tree_sitter_python();
-TSLanguage *tree_sitter_js();
-TSLanguage *tree_sitter_ts();
+TSLanguage *tree_sitter_javascript();
+TSLanguage *tree_sitter_typescript();
 TSLanguage *tree_sitter_tsx();
 
 typedef struct _parser {
@@ -131,7 +131,7 @@ CAMLprim value rets_parser_new_js(value unit) {
 
   v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
   memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
-  ts_parser_set_language(parser, tree_sitter_js());
+  ts_parser_set_language(parser, tree_sitter_javascript());
   CAMLreturn(v);
 };
 
@@ -145,7 +145,7 @@ CAMLprim value rets_parser_new_ts(value unit) {
 
   v = caml_alloc_custom(&parser_custom_ops, sizeof(parser_W), 0, 1);
   memcpy(Data_custom_val(v), &parserWrapper, sizeof(parser_W));
-  ts_parser_set_language(parser, tree_sitter_ts());
+  ts_parser_set_language(parser, tree_sitter_typescript());
   CAMLreturn(v);
 };
 
