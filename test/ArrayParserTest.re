@@ -11,7 +11,7 @@ describe("ArrayParser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content))))",
+        "(document (array (number) (string (string_content))))",
       );
     });
     test("parses a multi-line array", ({expect, _}) => {
@@ -23,7 +23,7 @@ describe("ArrayParser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content))))",
+        "(document (array (number) (string (string_content))))",
       );
     });
   });
@@ -41,7 +41,7 @@ describe("ArrayParser", ({describe, _}) => {
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
-      expect.string(ret).toEqual("(value (array (number)))");
+      expect.string(ret).toEqual("(document (array (number)))");
     });
 
     test("change single line", ({expect, _}) => {
@@ -61,7 +61,7 @@ describe("ArrayParser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (number) (number)))",
+        "(document (array (number) (number) (number)))",
       );
     });
 
@@ -81,7 +81,7 @@ describe("ArrayParser", ({describe, _}) => {
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
-      expect.string(ret).toEqual("(value (array))");
+      expect.string(ret).toEqual("(document (array))");
     });
 
     test("add multiple lines", ({expect, _}) => {
@@ -101,7 +101,7 @@ describe("ArrayParser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content)) (number)))",
+        "(document (array (number) (string (string_content)) (number)))",
       );
     });
 
@@ -122,7 +122,7 @@ describe("ArrayParser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (string (string_content)) (number) (string (string_content))))",
+        "(document (array (string (string_content)) (number) (string (string_content))))",
       );
     });
 

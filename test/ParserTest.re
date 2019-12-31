@@ -33,11 +33,11 @@ describe("Parser", ({describe, _}) => {
       let ret = Node.toString(node);
       prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content))))",
+        "(document (array (number) (string (string_content))))",
       );
 
       expect.int(Node.getChildCount(node)).toBe(1);
-      expect.string(Node.getType(node)).toEqual("value");
+      expect.string(Node.getType(node)).toEqual("document");
 
       let arrayNode = Node.getChild(node, 0);
       expect.string(Node.getType(arrayNode)).toEqual("array");

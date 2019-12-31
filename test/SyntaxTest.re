@@ -89,14 +89,14 @@ describe("Syntax", ({describe, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let scopes = Syntax.getParentScopes(firstChild);
 
-      expect.bool(scopes == [(0, "value")]).toBe(true);
+      expect.list(scopes).toEqual([(0, "document")])
     });
     test("returns multiple item for second child", ({expect, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let secondChild = Node.getChild(firstChild, 0);
       let scopes = Syntax.getParentScopes(secondChild);
 
-      expect.bool(scopes == [(0, "value"), (0, "array")]).toBe(true);
+      expect.list(scopes).toEqual([(0, "document"), (0, "array")]);
     });
   });
 });
