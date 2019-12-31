@@ -39,31 +39,28 @@ void finalize_tree(value v) {
 }
 
 static struct custom_operations parser_custom_ops = {
-  .identifier = "parser handling",
-  .finalize = finalize_parser,
-  .compare = custom_compare_default,
-  .hash = custom_hash_default,
-  .serialize = custom_serialize_default,
-  .deserialize = custom_deserialize_default
-};
+    .identifier = "parser handling",
+    .finalize = finalize_parser,
+    .compare = custom_compare_default,
+    .hash = custom_hash_default,
+    .serialize = custom_serialize_default,
+    .deserialize = custom_deserialize_default};
 
 static struct custom_operations tree_custom_ops = {
-  .identifier = "tree handling",
-  .finalize = finalize_tree,
-  .compare = custom_compare_default,
-  .hash = custom_hash_default,
-  .serialize = custom_serialize_default,
-  .deserialize = custom_deserialize_default
-};
+    .identifier = "tree handling",
+    .finalize = finalize_tree,
+    .compare = custom_compare_default,
+    .hash = custom_hash_default,
+    .serialize = custom_serialize_default,
+    .deserialize = custom_deserialize_default};
 
 static struct custom_operations TSNode_custom_ops = {
-  .identifier = "TSNode handling",
-  .finalize = custom_finalize_default,
-  .compare = custom_compare_default,
-  .hash = custom_hash_default,
-  .serialize = custom_serialize_default,
-  .deserialize = custom_deserialize_default
-};
+    .identifier = "TSNode handling",
+    .finalize = custom_finalize_default,
+    .compare = custom_compare_default,
+    .hash = custom_hash_default,
+    .serialize = custom_serialize_default,
+    .deserialize = custom_deserialize_default};
 
 CAMLprim value rets_parser_new_json(value unit) {
   CAMLparam0();

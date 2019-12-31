@@ -89,7 +89,7 @@ describe("Syntax", ({describe, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
       let scopes = Syntax.getParentScopes(firstChild);
 
-      expect.list(scopes).toEqual([(0, "document")])
+      expect.list(scopes).toEqual([(0, "document")]);
     });
     test("returns multiple item for second child", ({expect, _}) => {
       let firstChild = Node.getChild(simpleNode, 0);
