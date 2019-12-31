@@ -5,6 +5,7 @@ Printexc.record_backtrace(true);
 
 let jsonParser = Parser.json();
 let cParser = Parser.c();
+let cppParser = Parser.cpp();
 let jsParser = Parser.javascript();
 let tsParser = Parser.typescript();
 let pyParser = Parser.python();
@@ -31,12 +32,14 @@ let doBench = (name, f) => bench(~name, ~options, ~setup, ~f, ());
 
 doBench("String: Small JSON", parse(simpleJson, jsonParser));
 doBench("String: Small C", parse(simpleC, cParser));
+doBench("String: Small C++", parse(simpleC, cppParser));
 doBench("String: Small JS", parse(simpleJs, jsParser));
 doBench("String: Small TS", parse(simpleTs, tsParser));
 doBench("String: Small Python", parse(simplePy, pyParser));
 
 doBench("String: Large JSON", parse(TestData.largeJsonString, jsonParser));
 doBench("String: Large C", parse(TestData.largeCString, cParser));
+doBench("String: Large C++", parse(TestData.largeCPPString, cppParser));
 doBench("String: Large JS", parse(TestData.largeJSString, jsParser));
 doBench("String: Large TS", parse(TestData.largeTSString, tsParser));
 doBench("String: Large Python", parse(TestData.largePyString, pyParser));
@@ -47,6 +50,7 @@ doBench(
 );
 
 doBench("Array: Large C", parseArray(TestData.largeCArray, cParser));
+doBench("Array: Large C++", parseArray(TestData.largeCPPArray, cppParser));
 doBench("Array: Large JS", parseArray(TestData.largeJSArray, jsParser));
 doBench("Array: Large TS", parseArray(TestData.largeTSArray, tsParser));
 doBench("Array: Large Python", parseArray(TestData.largePyArray, pyParser));

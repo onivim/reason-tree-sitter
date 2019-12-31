@@ -8,8 +8,9 @@ ReasonML bindings for tree-sitter
 Test cases are ran over large files to check the parsers and their performance.
 Their licenses can be found here:
 
- - [JSON](https://github.com/miloyip/nativejson-benchmark/blob/master/LICENSE)
- - [C](https://sqlite.org/copyright.html)
- - [Javascript](https://github.com/facebook/react/blob/master/LICENSE)
- - [Typescript](https://github.com/microsoft/vscode-textmate/blob/master/LICENSE.md)
- - [Python](https://github.com/psf/black/blob/master/LICENSE)
+ - [JSON - NativeJSON Benchmark](https://github.com/miloyip/nativejson-benchmark/blob/master/LICENSE)
+ - [C - SQLite](https://sqlite.org/copyright.html)
+ - [Javascript - React](https://github.com/facebook/react/blob/master/LICENSE)
+ - [Typescript - VSCode Textmate](https://github.com/microsoft/vscode-textmate/blob/master/LICENSE.md)
+ - [Python - Black](https://github.com/psf/black/blob/master/LICENSE)
+ - [C++ - Imgui](https://github.com/ocornut/imgui/blob/master/LICENSE.txt)
