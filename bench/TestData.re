@@ -32,4 +32,8 @@ let largeCArray = largeC |> Array.of_list;
 let largeJS = read_file(dir ++ "/" ++ "react-dom.development.js");
 let largeJSString = largeJS |> String.concat("\n");
 let largeJSArray = largeJS |> Array.of_list;
+
+let largeTS = read_file(dir ++ "/" ++ "vscode.d.ts");
+let largeTSString = largeTS |> String.concat("\n");
+let largeTSArray = largeTS |> Array.of_list;
 print_endline("Finished loading.");

@@ -8,4 +8,4 @@
 (install
     (section bin)
     (package treesitter-bench)
-    (files canada.json sqlite3.c react-dom.development.js))
+    (files canada.json sqlite3.c react-dom.development.js vscode.d.ts))
