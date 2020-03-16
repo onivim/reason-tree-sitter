@@ -28,6 +28,6 @@
     "editor-core-types": "onivim/editor-core-types#5e5ffd9"
   },
   "devDependencies": {
-    "ocaml": "~4.7.0"
+    "ocaml": "~4.8.0"
   }
 }
