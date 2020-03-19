@@ -4,7 +4,7 @@
     "run": "esy '@bench' x TreeSitterBench"
   },
   "override": {
-      "build": ["dune build --root . -j4"],
+      "build": ["dune build -p treesitter,treesitter-bench -j4"],
       "dependencies": {
         "reperf": "^1.3.0"
       },
