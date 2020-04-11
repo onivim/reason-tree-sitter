@@ -23,7 +23,7 @@
     "@esy-ocaml/reason": "^3.4.0",
     "refmterr": "*",
     "ocaml": ">=4.6.0",
-    "esy-tree-sitter": "CrossR/esy-tree-sitter#fdcf8f7",
+    "esy-tree-sitter": "CrossR/esy-tree-sitter#75b7d04",
     "reperf": "^1.3.0",
     "editor-core-types": "onivim/editor-core-types#5e5ffd9"
   },
