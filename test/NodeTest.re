@@ -71,7 +71,7 @@ describe("Node", ({describe, _}) => {
         )
       );
       test("hasError turns true when there are errors", ({expect, _}) => {
-        expect.bool(Node.hasError(errorNode)).toBe(true);
+        expect.bool(Node.hasError(errorNode)).toBe(true)
       });
       test("isError returns true only for the error node", ({expect, _}) => {
         expect.bool(Node.isError(errorNode)).toBe(false);
