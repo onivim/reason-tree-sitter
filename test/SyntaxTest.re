@@ -46,7 +46,6 @@ describe("Syntax", ({describe, _}) => {
 
   describe("getTokens", ({test, _}) => {
     test("returns list of tokens for object in  success case", ({expect, _}) => {
-      prerr_endline("--OBJECT--");
       let tokens =
         Syntax.getTokens(
           ~getTokenName=objectNameResolver,
@@ -54,11 +53,9 @@ describe("Syntax", ({describe, _}) => {
           objectNode,
         );
 
-      List.iter(v => prerr_endline(Syntax.Token.show(v)), tokens);
       expect.int(List.length(tokens)).toBe(9);
     });
     test("returns list of tokens in success case", ({expect, _}) => {
-      prerr_endline("--ARRAY--");
       let tokens =
         Syntax.getTokens(
           ~getTokenName=simpleNameResolver,
@@ -66,15 +63,12 @@ describe("Syntax", ({describe, _}) => {
           simpleNode,
         );
 
-      List.iter(v => prerr_endline(Syntax.Token.show(v)), tokens);
       expect.int(List.length(tokens)).toBe(7);
     });
     test("returns list of tokens in error case", ({expect, _}) => {
-      prerr_endline("--ERROR--");
       let tokens =
         Syntax.getTokens(~getTokenName=errorNameResolver, ~range, errorNode);
 
-      List.iter(v => prerr_endline(Syntax.Token.show(v)), tokens);
       expect.int(List.length(tokens)).toBe(4);
     });
   });

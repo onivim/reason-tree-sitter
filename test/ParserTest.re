@@ -31,7 +31,6 @@ describe("Parser", ({describe, _}) => {
       //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
         "(document (array (number) (string (string_content))))",
       );
@@ -57,7 +56,6 @@ describe("Parser", ({describe, _}) => {
       //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
         "(translation_unit (function_definition type: (primitive_type) declarator: (function_declarator declarator: (identifier) parameters: (parameter_list)) body: (compound_statement (return_statement (number_literal)))))",
       );
