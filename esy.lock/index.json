@@ -1,5 +1,5 @@
 {
-  "checksum": "ff0c11c65b82cb80b8a6443012c90a93",
+  "checksum": "369e788e6ad534fe8c7d6f729915f262",
   "root": "reason-tree-sitter@link-dev:./package.json",
   "node": {
     "reperf@1.5.0@d41d8cd9": {
@@ -54,7 +54,7 @@
       "dependencies": [
         "reperf@1.5.0@d41d8cd9", "refmterr@3.3.0@d41d8cd9",
         "ocaml@4.8.1000@d41d8cd9",
-        "esy-tree-sitter@github:CrossR/esy-tree-sitter#4453dce@d41d8cd9",
+        "esy-tree-sitter@github:CrossR/esy-tree-sitter#fdcf8f7@d41d8cd9",
         "editor-core-types@github:onivim/editor-core-types#5e5ffd9@d41d8cd9",
         "@opam/dune-configurator@opam:2.4.0@6976bb12",
         "@opam/dune@opam:2.4.0@639d28a3", "@esy-ocaml/reason@3.6.0@d41d8cd9"
@@ -75,13 +75,13 @@
       "dependencies": [],
       "devDependencies": []
     },
-    "esy-tree-sitter@github:CrossR/esy-tree-sitter#4453dce@d41d8cd9": {
-      "id": "esy-tree-sitter@github:CrossR/esy-tree-sitter#4453dce@d41d8cd9",
+    "esy-tree-sitter@github:CrossR/esy-tree-sitter#fdcf8f7@d41d8cd9": {
+      "id": "esy-tree-sitter@github:CrossR/esy-tree-sitter#fdcf8f7@d41d8cd9",
       "name": "esy-tree-sitter",
-      "version": "github:CrossR/esy-tree-sitter#4453dce",
+      "version": "github:CrossR/esy-tree-sitter#fdcf8f7",
       "source": {
         "type": "install",
-        "source": [ "github:CrossR/esy-tree-sitter#4453dce" ]
+        "source": [ "github:CrossR/esy-tree-sitter#fdcf8f7" ]
       },
       "overrides": [],
       "dependencies": [],
