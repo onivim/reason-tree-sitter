@@ -258,12 +258,12 @@ module TextMateConverter = {
     let json_string =
       switch (language) {
       | Json => ScopeConverter.Json.json
-      | C => ScopeConverter.Json.json
-      | Cpp => ScopeConverter.Json.json
-      | Python => ScopeConverter.Json.json
-      | Javascript => ScopeConverter.Json.json
-      | Typescript => ScopeConverter.Json.json
-      | Tsx => ScopeConverter.Json.json
+      | C => ScopeConverter.C.json
+      | Cpp => ScopeConverter.Cpp.json
+      | Python => ScopeConverter.Python.json
+      | Javascript => ScopeConverter.Javascript.json
+      | Typescript => ScopeConverter.Typescript.json
+      | Tsx => ScopeConverter.Tsx.json
       };
 
     of_json_string(json_string);
