@@ -5,7 +5,7 @@ open TestFramework;
 describe("ArrayParser", ({describe, _}) => {
   describe("parse", ({test, _}) => {
     test("parses a single line array", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (tree, _) = ArrayParser.parse(jsonParser, None, [|"[1, \"2\"]"|]);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
@@ -16,7 +16,7 @@ describe("ArrayParser", ({describe, _}) => {
     test("parses a multi-line array", ({expect, _}) => {
       let multiLineArray = [|"[", "1,", "\"2\"", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (tree, _) = ArrayParser.parse(jsonParser, None, multiLineArray);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
@@ -27,7 +27,7 @@ describe("ArrayParser", ({describe, _}) => {
   });
   describe("incremental parse", ({test, _}) => {
     test("incrementally update single line", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) =
         ArrayParser.parse(jsonParser, None, [|"[1, \"2\"]"|]);
 
@@ -46,7 +46,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "1,", "2,", "3", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"2,"|];
@@ -66,7 +66,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [||];
@@ -84,7 +84,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "1,", "\"2\",", "3", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"1,", "\"2\",", "3"|];
@@ -104,7 +104,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "\"1\",", "2,", "\"3\"", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"\"1\",", "2,", "\"3\""|];
@@ -133,7 +133,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [||];
@@ -197,7 +197,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|""|];
@@ -259,7 +259,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "a", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"a"|];
@@ -319,7 +319,7 @@ describe("ArrayParser", ({describe, _}) => {
       expect.string(Syntax.Token.getName(rightBracket)).toEqual("\"]\"");
     });
     test("regression test: multiple delta updates", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let start = [|"[", "]"|];
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 

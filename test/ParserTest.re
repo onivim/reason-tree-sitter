@@ -5,7 +5,7 @@ open Treesitter;
 describe("Parser", ({describe, _}) => {
   describe("allocation", ({test, _}) => {
     test("finalizer gets called for parser", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let callCount = ref(0);
       Gc.finalise_last(() => incr(callCount), jsonParser);
       Gc.full_major();
@@ -14,7 +14,7 @@ describe("Parser", ({describe, _}) => {
     });
 
     test("finalizer gets called for tree", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let tree = Parser.parseString(jsonParser, "[1, \"a\", null]");
 
       let callCount = ref(0);
@@ -26,7 +26,7 @@ describe("Parser", ({describe, _}) => {
   });
   describe("json", ({test, _}) =>
     test("simple parsing case", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let tree = Parser.parseString(jsonParser, "[1, \"2\"]");
       //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
       let node = Tree.getRootNode(tree);
@@ -51,9 +51,9 @@ describe("Parser", ({describe, _}) => {
   );
   describe("c", ({test, _}) =>
     test("basic parse case", ({expect, _}) => {
-      let jsonParser = Parser.c();
-      let tree = Parser.parseString(jsonParser, "int main() { return 1; }");
-      //let tree = Parser.parseString(jsonParser, "{ \"a\": 1 }");
+      let cParser = Parser.getParserForLanguage(Languages.C);
+      let tree = Parser.parseString(cParser, "int main() { return 1; }");
+      //let tree = Parser.parseString(cParser, "{ \"a\": 1 }");
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
       expect.string(ret).toEqual(

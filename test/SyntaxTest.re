@@ -3,7 +3,7 @@ open Treesitter;
 open TestFramework;
 
 describe("Syntax", ({describe, _}) => {
-  let jsonParser = Parser.json();
+  let jsonParser = Parser.getParserForLanguage(Languages.Json);
   let simpleArray = [|"[1, \"200\"]"|];
   let (tree, _) = ArrayParser.parse(jsonParser, None, simpleArray);
   let simpleNode = Tree.getRootNode(tree);

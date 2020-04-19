@@ -4,26 +4,8 @@
 
 type t;
 
-/* [json()] returns a new JSON parser */
-let json: unit => t;
-
-/* [c()] returns a new C parser */
-let c: unit => t;
-
-/* [cpp()] returns a new C++ parser */
-let cpp: unit => t;
-
-/* [python()] returns a new Python parser */
-let python: unit => t;
-
-/* [javascript()] returns a new Javascript parser */
-let javascript: unit => t;
-
-/* [typescript()] returns a new TS parser */
-let typescript: unit => t;
-
-/* [tsx()] returns a new TSX parser */
-let tsx: unit => t;
+/* [getParser(scope)] returns the parser for that language. */
+let getParserForLanguage: Languages.t => t;
 
 /*
    [parseString(parser, contents)] parses a string with [parser],
