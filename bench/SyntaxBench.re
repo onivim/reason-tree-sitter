@@ -4,7 +4,7 @@ open BenchFramework;
 
 Printexc.record_backtrace(true);
 
-let jsonParser = Parser.json();
+let jsonParser = Parser.getParserForLanguage(Languages.Json);
 
 let largeTree = Parser.parseString(jsonParser, TestData.largeJsonString);
 let largeNode = Tree.getRootNode(largeTree);

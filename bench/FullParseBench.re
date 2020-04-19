@@ -3,12 +3,12 @@ open BenchFramework;
 
 Printexc.record_backtrace(true);
 
-let jsonParser = Parser.json();
-let cParser = Parser.c();
-let cppParser = Parser.cpp();
-let jsParser = Parser.javascript();
-let tsParser = Parser.typescript();
-let pyParser = Parser.python();
+let jsonParser = Parser.getParserForLanguage(Languages.Json);
+let cParser = Parser.getParserForLanguage(Languages.C);
+let cppParser = Parser.getParserForLanguage(Languages.Cpp);
+let jsParser = Parser.getParserForLanguage(Languages.Javascript);
+let tsParser = Parser.getParserForLanguage(Languages.Typescript);
+let pyParser = Parser.getParserForLanguage(Languages.Python);
 
 let simpleJson = "[1, \"2\", { \"test\": [1] }]";
 let simpleC = "int main() { return 1; }";
