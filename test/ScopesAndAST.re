@@ -8,7 +8,8 @@ describe("Tree-sitter -> Scopes", ({describe, _}) => {
     test("basic parse case", ({expect, _}) => {
       let cParser = Parser.getParserForLanguage(Languages.C);
       let tree = Parser.parseString(cParser, "int main() { return 1; }");
-      let cScopeConverter = TextMateConverter.getScopeConverterForLanguage(Languages.C);
+      let cScopeConverter =
+        TextMateConverter.getScopeConverterForLanguage(Languages.C);
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
@@ -20,8 +21,9 @@ describe("Tree-sitter -> Scopes", ({describe, _}) => {
       let intType = Node.getType(intChildNode);
       expect.string(intType).toEqual("primitive_type");
 
-      let tmScope = TextMateConverter.getTextMateScope(~token=intType, cScopeConverter);
+      let tmScope =
+        TextMateConverter.getTextMateScope(~token=intType, cScopeConverter);
       expect.string(tmScope).toEqual("support.storage.type");
     })
-  );
+  )
 });
