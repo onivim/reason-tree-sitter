@@ -1,8 +1,6 @@
 open TestFramework;
 
-module TreeSitterScopes = Treesitter.TreeSitterScopes;
-
-open TreeSitterScopes;
+open Treesitter.TreeSitterScopes;
 
 describe("TreeSitterScopes", ({describe, _}) =>
   describe("TextMateConverter", ({test, _ /*describe,*/}) => {
