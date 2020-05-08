@@ -33,8 +33,8 @@ let libPath = "-L" ^ treeSitterLibPath
 
 let flags = []
         @ ccopt(libPath)
-        @ cclib("-lstdc++")
         @ cclib("-ltree-sitter")
+        @ cclib("-lstdc++")
 ;;
 
 let flags_with_sanitize =
@@ -45,7 +45,7 @@ let flags_with_sanitize =
 
 let cxx_flags =
     match get_os with
-    | Linux | Mac | Windows -> c_flags @ ["-lstdc++"]
+    | Linux | Mac | Windows -> c_flags
     | _ -> c_flags
 ;;
 
