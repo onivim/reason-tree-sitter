@@ -5,31 +5,29 @@ open TestFramework;
 describe("ArrayParser", ({describe, _}) => {
   describe("parse", ({test, _}) => {
     test("parses a single line array", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (tree, _) = ArrayParser.parse(jsonParser, None, [|"[1, \"2\"]"|]);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content))))",
+        "(document (array (number) (string (string_content))))",
       );
     });
     test("parses a multi-line array", ({expect, _}) => {
       let multiLineArray = [|"[", "1,", "\"2\"", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (tree, _) = ArrayParser.parse(jsonParser, None, multiLineArray);
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content))))",
+        "(document (array (number) (string (string_content))))",
       );
     });
   });
   describe("incremental parse", ({test, _}) => {
     test("incrementally update single line", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) =
         ArrayParser.parse(jsonParser, None, [|"[1, \"2\"]"|]);
 
@@ -40,8 +38,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
-      expect.string(ret).toEqual("(value (array (number)))");
+      expect.string(ret).toEqual("(document (array (number)))");
     });
 
     test("change single line", ({expect, _}) => {
@@ -49,7 +46,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "1,", "2,", "3", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"2,"|];
@@ -59,9 +56,8 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (number) (number)))",
+        "(document (array (number) (number) (number)))",
       );
     });
 
@@ -70,7 +66,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [||];
@@ -80,8 +76,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
-      expect.string(ret).toEqual("(value (array))");
+      expect.string(ret).toEqual("(document (array))");
     });
 
     test("add multiple lines", ({expect, _}) => {
@@ -89,7 +84,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "1,", "\"2\",", "3", "]", ""|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"1,", "\"2\",", "3"|];
@@ -99,9 +94,8 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (number) (string (string_content)) (number)))",
+        "(document (array (number) (string (string_content)) (number)))",
       );
     });
 
@@ -110,7 +104,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "\"1\",", "2,", "\"3\"", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"\"1\",", "2,", "\"3\""|];
@@ -120,9 +114,8 @@ describe("ArrayParser", ({describe, _}) => {
 
       let node = Tree.getRootNode(tree);
       let ret = Node.toString(node);
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual(
-        "(value (array (string (string_content)) (number) (string (string_content))))",
+        "(document (array (string (string_content)) (number) (string (string_content))))",
       );
     });
 
@@ -140,7 +133,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [||];
@@ -154,7 +147,6 @@ describe("ArrayParser", ({describe, _}) => {
           ~start=Location.create(~line=Index.zero, ~column=Index.zero),
           ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
-      prerr_endline("-----START-------");
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
@@ -199,14 +191,13 @@ describe("ArrayParser", ({describe, _}) => {
         true,
       );
       expect.string(Syntax.Token.getName(rightBracket)).toEqual("\"]\"");
-      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
     test("token positions are preserved when adding a line", ({expect, _}) => {
       let start = [|"[", "]"|];
 
       let endv = [|"[", "", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|""|];
@@ -221,7 +212,6 @@ describe("ArrayParser", ({describe, _}) => {
           ~start=Location.create(~line=Index.zero, ~column=Index.zero),
           ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
-      prerr_endline("-----START-------");
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
       // Validate tokens aren't shifted when deleting a row
@@ -262,7 +252,6 @@ describe("ArrayParser", ({describe, _}) => {
         toBe(
         true,
       );
-      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
     test(
       "token positions are preserved when modifying a line", ({expect, _}) => {
@@ -270,7 +259,7 @@ describe("ArrayParser", ({describe, _}) => {
 
       let endv = [|"[", "a", "]"|];
 
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 
       let update = [|"a"|];
@@ -285,7 +274,6 @@ describe("ArrayParser", ({describe, _}) => {
           ~stop=Location.create(~line=Index.(zero + 3), ~column=Index.zero),
         );
       let getTokenName = Syntax.createArrayTokenNameResolver(endv);
-      prerr_endline("-----START-------");
       let tokens = Syntax.getTokens(~getTokenName, ~range, node);
 
       // Validate tokens aren't shifted when deleting a row
@@ -329,10 +317,9 @@ describe("ArrayParser", ({describe, _}) => {
         true,
       );
       expect.string(Syntax.Token.getName(rightBracket)).toEqual("\"]\"");
-      List.iter(t => prerr_endline(Syntax.Token.show(t)), tokens);
     });
     test("regression test: multiple delta updates", ({expect, _}) => {
-      let jsonParser = Parser.json();
+      let jsonParser = Parser.getParserForLanguage(Languages.Json);
       let start = [|"[", "]"|];
       let (_, baseline) = ArrayParser.parse(jsonParser, None, start);
 

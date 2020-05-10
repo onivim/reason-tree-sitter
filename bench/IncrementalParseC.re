@@ -3,7 +3,7 @@ open BenchFramework;
 
 Printexc.record_backtrace(true);
 
-let cParser = Parser.c();
+let cParser = Parser.getParserForLanguage(Languages.C);
 
 let (_, baseline) = ArrayParser.parse(cParser, None, TestData.largeCArray);
 

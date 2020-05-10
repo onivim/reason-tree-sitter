@@ -4,11 +4,8 @@
 
 type t;
 
-/* [json()] returns a new JSON parser */
-let json: unit => t;
-
-/* [c()] returns a new C/C++ parser */
-let c: unit => t;
+/* [getParser(scope)] returns the parser for that language. */
+let getParserForLanguage: Languages.t => t;
 
 /*
    [parseString(parser, contents)] parses a string with [parser],

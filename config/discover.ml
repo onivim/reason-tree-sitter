@@ -21,7 +21,7 @@ let get_os =
 
 let treeSitterIncludePath = Sys.getenv "TREESITTER_INCLUDE_PATH"
 let treeSitterLibPath = Sys.getenv "TREESITTER_LIB_PATH"
-let c_flags = ["-I"; treeSitterIncludePath; "-I"; treeSitterLibPath ]
+let c_flags = ["-I"; treeSitterIncludePath; "-I"; treeSitterLibPath; "-lstdc++" ]
 
 let _ = print_endline (treeSitterIncludePath)
 let _ = print_endline (treeSitterLibPath)
@@ -34,6 +34,7 @@ let libPath = "-L" ^ treeSitterLibPath
 let flags = []
         @ ccopt(libPath)
         @ cclib("-ltree-sitter")
+        @ cclib("-lstdc++")
 ;;
 
 let flags_with_sanitize =
@@ -42,7 +43,10 @@ let flags_with_sanitize =
     | _ -> flags
 ;;
 
-let cxx_flags = c_flags
+let cxx_flags =
+    match get_os with
+    | Linux | Mac | Windows -> c_flags
+    | _ -> c_flags
 ;;
 
 Configurator.V1.Flags.write_sexp "c_flags.sexp" c_flags;

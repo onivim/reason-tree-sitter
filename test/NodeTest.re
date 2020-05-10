@@ -3,7 +3,7 @@ open TestFramework;
 open Treesitter;
 
 describe("Node", ({describe, _}) => {
-  let jsonParser = Parser.json();
+  let jsonParser = Parser.getParserForLanguage(Languages.Json);
   let (tree, _) =
     ArrayParser.parse(jsonParser, None, [|"[1,", "\"2\"", "]"|]);
   let simpleNode = Tree.getRootNode(tree);
@@ -48,7 +48,6 @@ describe("Node", ({describe, _}) => {
       expect.int((endPoint.line :> int)).toBe(1);
       expect.int((endPoint.column :> int)).toBe(3);
 
-      prerr_endline("RET: " ++ ret);
       expect.string(ret).toEqual("(string (string_content))");
     });
     describe("getStartPoint / getEndPoint", ({test, _}) =>
@@ -72,8 +71,7 @@ describe("Node", ({describe, _}) => {
         )
       );
       test("hasError turns true when there are errors", ({expect, _}) => {
-        prerr_endline("ERROR: " ++ Node.toString(errorNode));
-        expect.bool(Node.hasError(errorNode)).toBe(true);
+        expect.bool(Node.hasError(errorNode)).toBe(true)
       });
       test("isError returns true only for the error node", ({expect, _}) => {
         expect.bool(Node.isError(errorNode)).toBe(false);
@@ -83,8 +81,6 @@ describe("Node", ({describe, _}) => {
 
         expect.bool(Node.isError(firstChild)).toBe(false);
         expect.bool(Node.isError(firstGrandChild)).toBe(true);
-
-        prerr_endline("GC: " ++ Node.toString(firstGrandChild));
       });
     });
   });

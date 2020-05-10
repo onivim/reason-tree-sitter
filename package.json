@@ -13,19 +13,16 @@
         "esy-installer treesitter.install"
     ]
   },
-  "resolutions": {
-    "@opam/biniou": "1.2.0",
-    "@opam/easy-format": "1.3.1"
-  },
   "dependencies": {
-    "@opam/dune": "^1.6.0",
+    "@opam/dune": "^2.0.0",
     "@opam/dune-configurator": "*",
     "@esy-ocaml/reason": "^3.4.0",
     "refmterr": "*",
     "ocaml": ">=4.6.0",
-    "esy-tree-sitter": "^1.4.1",
+    "esy-tree-sitter": "onivim/esy-tree-sitter#220f95bd",
     "reperf": "^1.3.0",
-    "editor-core-types": "onivim/editor-core-types#5e5ffd9"
+    "editor-core-types": "onivim/editor-core-types#5e5ffd9",
+    "reason-textmate": "^3.0.0"
   },
   "devDependencies": {
     "ocaml": "~4.8.0"

@@ -3,7 +3,7 @@ open BenchFramework;
 
 Printexc.record_backtrace(true);
 
-let jsonParser = Parser.json();
+let jsonParser = Parser.getParserForLanguage(Languages.Json);
 
 let simpleJson = "[1, \"2\", { \"test\": [1] }]";
 

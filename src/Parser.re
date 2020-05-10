@@ -9,6 +9,24 @@ type t;
 // Parsers for particular syntaxes
 external json: unit => t = "rets_parser_new_json";
 external c: unit => t = "rets_parser_new_c";
+external cpp: unit => t = "rets_parser_new_cpp";
+external python: unit => t = "rets_parser_new_python";
+external javascript: unit => t = "rets_parser_new_js";
+external typescript: unit => t = "rets_parser_new_ts";
+external tsx: unit => t = "rets_parser_new_tsx";
+
+let getParserForLanguage = language =>
+  Languages.(
+    switch (language) {
+    | Json => json()
+    | C => c()
+    | Cpp => cpp()
+    | Python => python()
+    | Javascript => javascript()
+    | Typescript => typescript()
+    | Tsx => tsx()
+    }
+  );
 
 // General parser methods
 external parseString: (t, string) => Tree.t = "rets_parser_parse_string";

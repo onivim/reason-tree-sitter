@@ -1,0 +1,13 @@
+{
+  "source": "./package.json",
+  "scripts": {
+    "run": "esy '@example' x treesitter-example"
+  },
+  "override": {
+      "build": ["dune build -p treesitter,treesitter-example -j4"],
+      "install": [
+          "esy-installer treesitter.install",
+          "esy-installer treesitter-example.install"
+      ]
+  }
+}
