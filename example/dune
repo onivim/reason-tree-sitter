@@ -1,0 +1,6 @@
+(executable
+   (name TreeSitterExample)
+   (public_name treesitter-example)
+   (package treesitter-example)
+   (libraries treesitter)
+)
