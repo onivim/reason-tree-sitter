@@ -69,7 +69,8 @@ let getLineFromFile = (file, lineNum) => {
 let printNode = (converter, node) => {
   let tm = Node.toString(node);
   let nodeType = Node.getType(node);
-  let scope = TextMateConverter.getTextMateScope(~token=nodeType, converter);
+  let scopes = Syntax.getParentScopes(node);
+  let scope = TextMateConverter.getTextMateScope(~token=nodeType, ~path=scopes, converter);
   print_endline(nodeType ++ " : " ++ tm ++ " : " ++ scope);
 };
 
